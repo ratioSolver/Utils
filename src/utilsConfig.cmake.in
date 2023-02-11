@@ -1,0 +1,7 @@
+set(UTILS_VERSION 0.1.0)
+
+@PACKAGE_INIT@
+
+set_and_check(UTILS_INCLUDE_DIR "@PACKAGE_CMAKE_INSTALL_INCLUDEDIR@/utils")
+
+check_required_components(utils)
