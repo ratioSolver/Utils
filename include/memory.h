@@ -9,7 +9,7 @@ namespace utils
 
   /**
    * @brief A countable object that can be used to count the number of references.
-   * 
+   *
    */
   class countable
   {
@@ -26,7 +26,7 @@ namespace utils
 
   /**
    * @brief A countable object that can be used to count the number of references.
-   * 
+   *
    */
   template <typename T>
   class self_countable : public countable
@@ -83,6 +83,14 @@ namespace utils
     u_ptr(const u_ptr &) = delete;
     u_ptr(u_ptr &&other) : m_ptr(other.m_ptr) { other.m_ptr = nullptr; }
     ~u_ptr() { delete m_ptr; }
+
+    void reset(T *ptr)
+    {
+      delete m_ptr;
+      m_ptr = ptr;
+    }
+
+    operator bool() const { return m_ptr != nullptr; }
 
     T &operator*() const { return *m_ptr; }
     T *operator->() const { return m_ptr; }

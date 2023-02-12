@@ -33,19 +33,3 @@
   {              \
   }
 #endif
-
-template <typename T>
-std::ostream &operator<<(std::ostream &os, const std::vector<T> &v)
-{
-#ifdef VERBOSE_LOG
-  os << "[";
-  for (auto it = v.begin(); it != v.end(); ++it)
-  {
-    os << *it;
-    if (std::next(it) != v.end())
-      os << ", ";
-  }
-  os << "]";
-#endif
-  return os;
-}

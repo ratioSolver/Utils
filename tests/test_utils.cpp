@@ -1,7 +1,7 @@
 #include "combinations.h"
 #include "cartesian_product.h"
 #include "memory.h"
-#include "logging.h"
+#include "logging_containers.h"
 #include <iostream>
 #include <vector>
 
