@@ -51,8 +51,8 @@ namespace utils
   class c_ptr
   {
   public:
-    explicit c_ptr(T *m_ptr) : m_ptr(m_ptr) { m_ptr->m_count++; }
-    explicit c_ptr(const c_ptr &other) : m_ptr(other.m_ptr) { m_ptr->m_count++; }
+    c_ptr(T *m_ptr) : m_ptr(m_ptr) { m_ptr->m_count++; }
+    c_ptr(const c_ptr &other) : m_ptr(other.m_ptr) { m_ptr->m_count++; }
     ~c_ptr()
     {
       m_ptr->m_count--;
@@ -63,8 +63,26 @@ namespace utils
       }
     }
 
+    operator bool() const { return m_ptr != nullptr; }
+
     T &operator*() const { return *m_ptr; }
     T *operator->() const { return m_ptr; }
+
+    c_ptr &operator=(const c_ptr &other)
+    {
+      if (this != &other)
+      {
+        m_ptr->m_count--;
+        if (!m_ptr->m_count)
+        {
+          delete m_ptr;
+          m_ptr = nullptr;
+        }
+        m_ptr = other.m_ptr;
+        m_ptr->m_count++;
+      }
+      return *this;
+    }
 
   private:
     T *m_ptr = nullptr;
@@ -79,7 +97,7 @@ namespace utils
   class u_ptr
   {
   public:
-    u_ptr(T *m_ptr) : m_ptr(m_ptr) {}
+    u_ptr(T *m_ptr = nullptr) : m_ptr(m_ptr) {}
     u_ptr(const u_ptr &) = delete;
     u_ptr(u_ptr &&other) : m_ptr(other.m_ptr) { other.m_ptr = nullptr; }
     ~u_ptr() { delete m_ptr; }
@@ -89,6 +107,8 @@ namespace utils
       delete m_ptr;
       m_ptr = ptr;
     }
+
+    void swap(u_ptr<T> &other) { std::swap(m_ptr, other.m_ptr); }
 
     operator bool() const { return m_ptr != nullptr; }
 
