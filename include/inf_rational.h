@@ -160,14 +160,6 @@ namespace utils
       return c_str;
     };
 
-    friend json::json to_json(const inf_rational &rhs) noexcept
-    {
-      json::json j_inf = to_json(rhs.rat);
-      if (rhs.inf != rational::ZERO)
-        j_inf["inf"] = to_json(rhs.inf);
-      return j_inf;
-    }
-
   private:
     rational rat; // the rational part..
     rational inf; // the infinitesimal part..

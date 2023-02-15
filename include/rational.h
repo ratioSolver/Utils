@@ -1,12 +1,11 @@
 #pragma once
 
 #include "utils_export.h"
+#include "integer.h"
 #include <string>
 
 namespace utils
 {
-  using I = long;
-
   class rational final
   {
   public:
