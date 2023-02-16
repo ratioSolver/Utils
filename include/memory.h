@@ -25,23 +25,6 @@ namespace utils
   };
 
   /**
-   * @brief A countable object that can be used to count the number of references.
-   *
-   */
-  template <typename T>
-  class self_countable : virtual public countable
-  {
-  public:
-    self_countable() : countable(true), m_self(static_cast<T *>(this)) {}
-
-  protected:
-    c_ptr<T> &self() { return m_self; }
-
-  private:
-    c_ptr<T> m_self;
-  };
-
-  /**
    * @brief A countable pointer that deletes the object when the last reference is
    * deleted.
    *

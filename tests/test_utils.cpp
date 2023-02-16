@@ -30,20 +30,20 @@ class b;
 class a : public utils::countable
 {
 public:
-    a(utils::c_ptr<b> &m_b) : m_b(m_b) { LOG("a"); }
+    a(utils::c_ptr<b> m_b) : m_b(m_b) { LOG("a"); }
     ~a() { LOG("~a"); }
 
 private:
     utils::c_ptr<b> &m_b;
 };
 
-class b : public utils::self_countable<b>
+class b : public utils::countable
 {
 public:
-    b() { LOG("b"); }
+    b() : countable(true) { LOG("b"); }
     ~b() { LOG("~b"); }
 
-    void add_a() { m_a.push_back(utils::c_ptr<a>(new a(self()))); }
+    void add_a() { m_a.push_back(utils::c_ptr<a>(new a(this))); }
 
 private:
     std::vector<utils::c_ptr<a>> m_a;
