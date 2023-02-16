@@ -29,7 +29,7 @@ namespace utils
    *
    */
   template <typename T>
-  class self_countable : public countable
+  class self_countable : virtual public countable
   {
   public:
     self_countable() : countable(true), m_self(static_cast<T *>(this)) {}
