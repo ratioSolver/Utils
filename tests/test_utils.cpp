@@ -34,7 +34,7 @@ public:
     ~a() { LOG("~a"); }
 
 private:
-    utils::c_ptr<b> &m_b;
+    utils::c_ptr<b> m_b;
 };
 
 class b : public utils::countable
