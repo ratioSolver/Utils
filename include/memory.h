@@ -17,7 +17,7 @@ namespace utils
     friend class c_ptr;
 
   public:
-    countable(bool count = false) : m_count(count) {}
+    countable(bool self = false) : m_count(self) {}
     virtual ~countable() = default;
 
   private:
@@ -108,7 +108,12 @@ namespace utils
       m_ptr = ptr;
     }
 
-    void swap(u_ptr<T> &other) { std::swap(m_ptr, other.m_ptr); }
+    void swap(u_ptr<T> &other)
+    {
+      T *tmp = m_ptr;
+      m_ptr = other.m_ptr;
+      other.m_ptr = tmp;
+    }
 
     operator bool() const { return m_ptr != nullptr; }
 
