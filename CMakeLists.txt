@@ -15,6 +15,10 @@ include(CMakePackageConfigHelpers)
 include(CTest)
 enable_testing()
 
+set(INTEGER_TYPES "int" "long" "long long")
+set(INTEGER_TYPE "long" CACHE STRING "Integer type")
+set_property(CACHE INTEGER_TYPE PROPERTY STRINGS ${INTEGER_TYPES})
+
 option(VERBOSE_LOG "Makes log more verbose" OFF)
 option(ADD_COVERAGE "Add coverage" OFF)
 
@@ -24,6 +28,17 @@ file(GLOB UTILS_HEADERS include/*.h)
 add_library(${PROJECT_NAME} SHARED ${UTILS_SOURCES})
 GENERATE_EXPORT_HEADER(${PROJECT_NAME})
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+
+message(STATUS "Integer type:           ${INTEGER_TYPE}")
+if(INTEGER_TYPE STREQUAL "int")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_INT)
+elseif(INTEGER_TYPE STREQUAL "long")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_LONG)
+elseif(INTEGER_TYPE STREQUAL "long long")
+    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_LONG_LONG)
+else()
+    message(FATAL_ERROR "INTEGER_TYPE must be one of ${INTEGER_TYPES}")
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
