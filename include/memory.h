@@ -98,6 +98,18 @@ namespace utils
       other.m_ptr = tmp;
     }
 
+    u_ptr &operator=(const u_ptr &) = delete;
+    u_ptr &operator=(u_ptr &&other)
+    {
+      if (this != &other)
+      {
+        delete m_ptr;
+        m_ptr = other.m_ptr;
+        other.m_ptr = nullptr;
+      }
+      return *this;
+    }
+
     operator bool() const { return m_ptr != nullptr; }
 
     T &operator*() const { return *m_ptr; }
