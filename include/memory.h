@@ -62,6 +62,15 @@ namespace utils
     operator bool() const { return m_ptr != nullptr; }
 
     /**
+     * @brief Returns true if the pointers are equal.
+     *
+     * @param other The other pointer.
+     * @return true If the pointers are equal.
+     * @return false If the pointers are not equal.
+     */
+    bool operator==(const c_ptr &other) const { return m_ptr == other.m_ptr; }
+
+    /**
      * @brief Dereference the pointer.
      *
      * @return T& The object pointed to.
