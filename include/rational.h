@@ -30,7 +30,7 @@ namespace utils
     inline friend bool is_infinite(const rational &rhs) noexcept { return rhs.den == 0; }
     inline friend bool is_positive_infinite(const rational &rhs) noexcept { return is_positive(rhs) && is_infinite(rhs); }
     inline friend bool is_negative_infinite(const rational &rhs) noexcept { return is_negative(rhs) && is_infinite(rhs); }
-    inline friend double to_double(const rational &rhs) noexcept { return static_cast<double>(rhs.num) / static_cast<double>(rhs.den); }
+    inline friend double to_double(const rational &rhs) noexcept { return static_cast<double>(rhs.num) / rhs.den; }
 
     UTILS_EXPORT bool operator!=(const rational &rhs) const noexcept;
     UTILS_EXPORT bool operator<(const rational &rhs) const noexcept;
