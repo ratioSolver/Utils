@@ -34,35 +34,59 @@ namespace utils
   class c_ptr
   {
   public:
-    c_ptr(T *m_ptr) : m_ptr(m_ptr) { m_ptr->m_count++; }
-    c_ptr(const c_ptr &other) : m_ptr(other.m_ptr) { m_ptr->m_count++; }
+    c_ptr(T *m_ptr = nullptr) : m_ptr(m_ptr)
+    {
+      if (m_ptr)
+        m_ptr->m_count++;
+    }
+    c_ptr(const c_ptr &other) : m_ptr(other.m_ptr)
+    {
+      if (m_ptr)
+        m_ptr->m_count++;
+    }
     ~c_ptr()
     {
+      if (!m_ptr)
+        return;
       m_ptr->m_count--;
       if (!m_ptr->m_count)
-      {
         delete m_ptr;
-        m_ptr = nullptr;
-      }
     }
 
+    /**
+     * @brief Returns true if the pointer is not null.
+     *
+     * @return true If the pointer is not null.
+     * @return false If the pointer is null.
+     */
     operator bool() const { return m_ptr != nullptr; }
 
+    /**
+     * @brief Dereference the pointer.
+     *
+     * @return T& The object pointed to.
+     */
     T &operator*() const { return *m_ptr; }
+    /**
+     * @brief Returns the pointer.
+     *
+     * @return T* The pointer.
+     */
     T *operator->() const { return m_ptr; }
 
     c_ptr &operator=(const c_ptr &other)
     {
       if (this != &other)
       {
-        m_ptr->m_count--;
-        if (!m_ptr->m_count)
+        if (m_ptr)
         {
-          delete m_ptr;
-          m_ptr = nullptr;
+          m_ptr->m_count--;
+          if (!m_ptr->m_count)
+            delete m_ptr;
         }
         m_ptr = other.m_ptr;
-        m_ptr->m_count++;
+        if (m_ptr)
+          m_ptr->m_count++;
       }
       return *this;
     }
