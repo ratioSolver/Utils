@@ -308,15 +308,13 @@ namespace utils
         if (den != 1)
         {
             I c_gcd = std::gcd(num, den);
-            if (den < 0)
-                c_gcd = -c_gcd;
             num /= c_gcd;
             den /= c_gcd;
-        }
-        if (den < 0)
-        {
-            den = -den;
-            num = -num;
+            if (den < 0)
+            {
+                den = -den;
+                num = -num;
+            }
         }
     }
 
