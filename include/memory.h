@@ -50,7 +50,10 @@ namespace utils
         return;
       m_ptr->m_count--;
       if (!m_ptr->m_count)
+      {
         delete m_ptr;
+        m_ptr = nullptr;
+      }
     }
 
     /**
@@ -116,7 +119,11 @@ namespace utils
     u_ptr(T *m_ptr = nullptr) : m_ptr(m_ptr) {}
     u_ptr(const u_ptr &) = delete;
     u_ptr(u_ptr &&other) : m_ptr(other.m_ptr) { other.m_ptr = nullptr; }
-    ~u_ptr() { delete m_ptr; }
+    ~u_ptr()
+    {
+      delete m_ptr;
+      m_ptr = nullptr;
+    }
 
     void reset(T *ptr)
     {
