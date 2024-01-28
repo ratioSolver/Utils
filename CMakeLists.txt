@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(utils VERSION 0.2.0 LANGUAGES C CXX)
+project(utils VERSION 0.2.0 LANGUAGES CXX)
 
 include(CTest)
 enable_testing()
@@ -38,6 +38,7 @@ message(STATUS "Integer type:  ${INTEGER_TYPE}")
 message(STATUS "Logging level: ${LOGGING_LEVEL}")
 
 add_library(utils src/rational.cpp)
+target_compile_features(utils PUBLIC cxx_std_17)
 target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_definitions(utils PUBLIC INTEGER_TYPE=${INTEGER_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
 
