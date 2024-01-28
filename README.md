@@ -7,4 +7,3 @@ Currently implemented utilities are:
  - Combinations of given size from a container
  - Rationals
  - Infinitesimal rationals
- - Memory management utilities (e.g. `c_ptr`, `u_ptr`, etc.)
