@@ -1,5 +1,8 @@
-#include "rational.hpp"
+#pragma once
+
+#include <limits>
 
 namespace utils
 {
+  
 } // namespace utils
