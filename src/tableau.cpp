@@ -6,7 +6,7 @@ namespace utils
     VARIABLE_TYPE tableau::new_var()
     {
         watches.push_back(std::set<VARIABLE_TYPE>());
-        return watches.size() - 1;
+        return static_cast<VARIABLE_TYPE>(watches.size() - 1);
     }
 
     void tableau::add_row(const VARIABLE_TYPE x_i, lin &&expr)
