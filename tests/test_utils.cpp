@@ -1,6 +1,8 @@
+#include <cassert>
 #include "rational.hpp"
 #include "inf_rational.hpp"
-#include <cassert>
+#include "lin.hpp"
+#include "tableau.hpp"
 
 void test_rationals()
 {
@@ -114,12 +116,127 @@ void test_inf_rationals()
     assert(eps > 0);
 }
 
+void test_lin()
+{
+    utils::lin l1;
+    assert(l1.vars.empty());
+    assert(l1.known_term == utils::rational::zero);
+
+    utils::lin l2(utils::rational(1, 2));
+    assert(l2.vars.empty());
+    assert(l2.known_term == utils::rational(1, 2));
+
+    utils::lin l3(1, utils::rational(1, 2));
+    assert(l3.vars.size() == 1);
+    assert(l3.vars[1] == utils::rational(1, 2));
+    assert(l3.known_term == utils::rational::zero);
+
+    utils::lin l4(1, utils::rational(1, 2));
+    utils::lin l5(2, utils::rational(1, 3));
+    utils::lin l6 = l4 + l5;
+    assert(l6.vars.size() == 2);
+    assert(l6.vars[1] == utils::rational(1, 2));
+    assert(l6.vars[2] == utils::rational(1, 3));
+    assert(l6.known_term == utils::rational::zero);
+
+    utils::lin l7(1, utils::rational(1, 2));
+    utils::lin l8(2, utils::rational(1, 3));
+    utils::lin l9 = l7 - l8;
+    assert(l9.vars.size() == 2);
+    assert(l9.vars[1] == utils::rational(1, 2));
+    assert(l9.vars[2] == utils::rational(-1, 3));
+    assert(l9.known_term == utils::rational::zero);
+
+    utils::lin l10(1, utils::rational(1, 2));
+    utils::lin l12 = l10 * utils::rational(1, 3);
+    assert(l12.vars.size() == 1);
+    assert(l12.vars[1] == utils::rational(1, 6));
+    assert(l12.known_term == utils::rational::zero);
+
+    utils::lin l13(1, utils::rational(1, 2));
+    utils::lin l14 = utils::rational(1, 3) * l13;
+    assert(l14.vars.size() == 1);
+    assert(l14.vars[1] == utils::rational(1, 6));
+    assert(l14.known_term == utils::rational::zero);
+
+    utils::lin l15(1, utils::rational(1, 2));
+    utils::lin l16 = l15 / utils::rational(1, 3);
+    assert(l16.vars.size() == 1);
+    assert(l16.vars[1] == utils::rational(3, 2));
+    assert(l16.known_term == utils::rational::zero);
+
+    utils::lin l17(1, utils::rational(1, 2));
+    utils::lin l18 = l17 / utils::rational(1, 2);
+    assert(l18.vars.size() == 1);
+    assert(l18.vars[1] == utils::rational(1, 1));
+    assert(l18.known_term == utils::rational::zero);
+
+    utils::lin l19(1, utils::rational(1, 2));
+    utils::lin l20(2, utils::rational(1, 3));
+    l19 += l20;
+    assert(l19.vars.size() == 2);
+    assert(l19.vars[1] == utils::rational(1, 2));
+    assert(l19.vars[2] == utils::rational(1, 3));
+    assert(l19.known_term == utils::rational::zero);
+
+    utils::lin l21(1, utils::rational(1, 2));
+    utils::lin l22(2, utils::rational(1, 3));
+    l21 -= l22;
+    assert(l21.vars.size() == 2);
+    assert(l21.vars[1] == utils::rational(1, 2));
+    assert(l21.vars[2] == utils::rational(-1, 3));
+    assert(l21.known_term == utils::rational::zero);
+
+    utils::lin l23(1, utils::rational(1, 2));
+    l23 *= utils::rational(1, 3);
+    assert(l23.vars.size() == 1);
+    assert(l23.vars[1] == utils::rational(1, 6));
+    assert(l23.known_term == utils::rational::zero);
+
+    utils::lin l24(1, utils::rational(1, 2));
+    l24 /= utils::rational(1, 3);
+    assert(l24.vars.size() == 1);
+    assert(l24.vars[1] == utils::rational(3, 2));
+    assert(l24.known_term == utils::rational::zero);
+
+    utils::lin l25(1, utils::rational(1, 2));
+    l25 = -l25;
+    assert(l25.vars.size() == 1);
+    assert(l25.vars[1] == utils::rational(-1, 2));
+    assert(l25.known_term == utils::rational::zero);
+}
+
+void test_tableau()
+{
+    utils::tableau t;
+    auto x0 = t.new_var();
+    auto x1 = t.new_var();
+    auto x2 = t.new_var();
+    auto x3 = t.new_var();
+
+    utils::lin l1(x1, utils::rational(1, 2));
+    l1 += utils::rational(1, 3);
+    l1 += utils::lin(x2, utils::rational(1, 3));
+    t.add_row(x0, std::move(l1));
+
+    utils::lin l2(x1, utils::rational(1, 2));
+    l2 += utils::rational(1, 3);
+    l2 += utils::lin(x2, utils::rational(1, 3));
+    t.add_row(x3, std::move(l2));
+
+    t.pivot(x0, x1);
+}
+
 int main(int argc, char const *argv[])
 {
     test_rationals();
     test_rationals_1();
 
     test_inf_rationals();
+
+    test_lin();
+
+    test_tableau();
 
     return 0;
 }
