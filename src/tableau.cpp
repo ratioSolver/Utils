@@ -20,6 +20,7 @@ namespace utils
     void tableau::pivot(const VARIABLE_TYPE x_i, const VARIABLE_TYPE y_j) noexcept
     { // `x_i` is the leaving variable, `y_j` is the entering variable
         assert(table.find(x_i) != table.cend() && "x_i is not a basic variable");
+        assert(watches[x_i].empty() && "x_i is should not be in any other row of the tableau");
         assert(table.find(y_j) == table.cend() && "y_j is not a non-basic variable");
 
         // we remove the leaving variable `x_i` from the watches
