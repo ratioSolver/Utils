@@ -21,7 +21,7 @@ jobs:
           submodules: recursive
 
       - name: Install dependencies
-        if: matrix.os == 'ubuntu-latest'
+        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y lcov
 
       - name: Configure CMake (Debug)
@@ -45,11 +45,3 @@ jobs:
           lcov --capture --directory ${{github.workspace}}/build --output-file coverage.info
           lcov --remove coverage.info '/usr/*' --output-file coverage.info
           lcov --list coverage.info
-          bash <(curl -s https://codecov.io/bash) -f coverage.info
-      
-      - name: Upload coverage report
-        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-report
-          path: ${{github.workspace}}/build/coverage.info
