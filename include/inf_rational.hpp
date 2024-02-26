@@ -131,7 +131,7 @@ namespace utils
     [[nodiscard]] inline friend inf_rational operator*(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs * rhs.rat, lhs * rhs.inf); }
     [[nodiscard]] inline friend inf_rational operator/(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs / rhs.rat, lhs / rhs.inf); }
 
-    [[nodiscard]] friend std::string to_string(const inf_rational &rhs) noexcept
+    friend std::string to_string(const inf_rational &rhs) noexcept
     {
       if (is_infinite(rhs.rat) || rhs.inf == rational::zero)
         return to_string(rhs.rat);

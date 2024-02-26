@@ -64,17 +64,17 @@ namespace utils
     rational &operator*=(const INTEGER_TYPE &rhs) noexcept;
     rational &operator/=(const INTEGER_TYPE &rhs) noexcept;
 
-    [[nodiscard]] friend rational operator+(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator-(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator+(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator-(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
 
     [[nodiscard]] rational operator-() const noexcept;
 
   private:
     void normalize() noexcept;
 
-    [[nodiscard]] friend std::string to_string(const rational &rhs) noexcept;
+    friend std::string to_string(const rational &rhs) noexcept;
 
   private:
     INTEGER_TYPE num; // the numerator..

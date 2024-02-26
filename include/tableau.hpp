@@ -46,7 +46,7 @@ namespace utils
      */
     void pivot(const VARIABLE_TYPE x_i, const VARIABLE_TYPE y_j) noexcept;
 
-    [[nodiscard]] friend std::string to_string(const tableau &t) noexcept;
+    friend std::string to_string(const tableau &t) noexcept;
 
   private:
     std::map<const VARIABLE_TYPE, lin> table;

@@ -33,14 +33,14 @@ namespace utils
   public:
     [[nodiscard]] lin operator+(const lin &rhs) const noexcept;
     [[nodiscard]] lin operator+(const rational &rhs) const noexcept;
-    [[nodiscard]] friend lin operator+(const rational &lhs, const lin &rhs) noexcept;
+    friend lin operator+(const rational &lhs, const lin &rhs) noexcept;
 
     [[nodiscard]] lin operator-(const lin &rhs) const noexcept;
     [[nodiscard]] lin operator-(const rational &rhs) const noexcept;
-    [[nodiscard]] friend lin operator-(const rational &lhs, const lin &rhs) noexcept;
+    friend lin operator-(const rational &lhs, const lin &rhs) noexcept;
 
     [[nodiscard]] lin operator*(const rational &rhs) const noexcept;
-    [[nodiscard]] friend lin operator*(const rational &lhs, const lin &rhs) noexcept;
+    friend lin operator*(const rational &lhs, const lin &rhs) noexcept;
 
     [[nodiscard]] lin operator/(const rational &rhs) const noexcept;
 
@@ -61,7 +61,7 @@ namespace utils
      */
     [[nodiscard]] lin &substitute(const VARIABLE_TYPE v, const lin &rhs) noexcept;
 
-    [[nodiscard]] friend std::string to_string(const lin &rhs) noexcept;
+    friend std::string to_string(const lin &rhs) noexcept;
 
   public:
     std::map<const VARIABLE_TYPE, rational> vars;
