@@ -14,7 +14,7 @@ namespace utils
    * @return std::vector<std::vector<T>> Cartesian product of the vectors.
    */
   template <typename T>
-  std::vector<std::vector<T>> cartesian_product(const std::vector<std::vector<T>> &vs) noexcept
+  [[nodiscard]] std::vector<std::vector<T>> cartesian_product(const std::vector<std::vector<T>> &vs) noexcept
   {
     assert(std::none_of(vs.cbegin(), vs.cend(), [](const auto &v)
                         { return v.empty(); }));

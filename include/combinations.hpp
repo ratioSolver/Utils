@@ -16,7 +16,7 @@ namespace utils
    * @return std::vector<std::vector<T>> Combinations of the elements of the vector.
    */
   template <typename T>
-  std::vector<std::vector<T>> combinations(const std::vector<T> &v, const size_t &n) noexcept
+  [[nodiscard]] std::vector<std::vector<T>> combinations(const std::vector<T> &v, const size_t &n) noexcept
   {
     assert(v.size() >= n);
     std::vector<std::vector<T>> combs;

@@ -31,18 +31,18 @@ namespace utils
     explicit lin(const VARIABLE_TYPE v, const rational &c) { vars.emplace(v, c); }
 
   public:
-    lin operator+(const lin &rhs) const noexcept;
-    lin operator+(const rational &rhs) const noexcept;
-    friend lin operator+(const rational &lhs, const lin &rhs) noexcept;
+    [[nodiscard]] lin operator+(const lin &rhs) const noexcept;
+    [[nodiscard]] lin operator+(const rational &rhs) const noexcept;
+    [[nodiscard]] friend lin operator+(const rational &lhs, const lin &rhs) noexcept;
 
-    lin operator-(const lin &rhs) const noexcept;
-    lin operator-(const rational &rhs) const noexcept;
-    friend lin operator-(const rational &lhs, const lin &rhs) noexcept;
+    [[nodiscard]] lin operator-(const lin &rhs) const noexcept;
+    [[nodiscard]] lin operator-(const rational &rhs) const noexcept;
+    [[nodiscard]] friend lin operator-(const rational &lhs, const lin &rhs) noexcept;
 
-    lin operator*(const rational &rhs) const noexcept;
-    friend lin operator*(const rational &lhs, const lin &rhs) noexcept;
+    [[nodiscard]] lin operator*(const rational &rhs) const noexcept;
+    [[nodiscard]] friend lin operator*(const rational &lhs, const lin &rhs) noexcept;
 
-    lin operator/(const rational &rhs) const noexcept;
+    [[nodiscard]] lin operator/(const rational &rhs) const noexcept;
 
     lin &operator+=(const lin &rhs) noexcept;
     lin &operator+=(const rational &rhs) noexcept;
@@ -54,14 +54,14 @@ namespace utils
 
     lin &operator/=(const rational &rhs) noexcept;
 
-    lin operator-() const noexcept;
+    [[nodiscard]] lin operator-() const noexcept;
 
     /**
      * @brief Substitute the variable `v` with the linear expression `rhs`.
      */
-    lin &substitute(const VARIABLE_TYPE v, const lin &rhs) noexcept;
+    [[nodiscard]] lin &substitute(const VARIABLE_TYPE v, const lin &rhs) noexcept;
 
-    friend std::string to_string(const lin &rhs) noexcept;
+    [[nodiscard]] friend std::string to_string(const lin &rhs) noexcept;
 
   public:
     std::map<const VARIABLE_TYPE, rational> vars;
