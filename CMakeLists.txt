@@ -43,7 +43,7 @@ elseif(LOGGING_LEVEL STREQUAL "FATAL")
     set(LOG_LEVEL 5)
 endif()
 
-message(STATUS "Integer type:  ${INTEGER_TYPE}")
+message(STATUS "Integer type: ${INTEGER_TYPE}")
 message(STATUS "Variable type: ${VARIABLE_TYPE}")
 message(STATUS "Logging level: ${LOGGING_LEVEL}")
 
