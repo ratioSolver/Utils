@@ -1,8 +1,23 @@
 #include <cassert>
 #include "rational.hpp"
 #include "inf_rational.hpp"
+#include "lit.hpp"
 #include "lin.hpp"
 #include "tableau.hpp"
+
+void test_literals()
+{
+    utils::lit l0(2, false);
+    utils::lit l1 = !utils::lit(3);
+    utils::lit l2(4);
+
+    assert(variable(l0) == 2);
+    assert(sign(l0) == false);
+    assert(variable(l1) == 3);
+    assert(sign(l1) == false);
+    assert(variable(l2) == 4);
+    assert(sign(l2) == true);
+}
 
 void test_rationals()
 {
@@ -229,6 +244,8 @@ void test_tableau()
 
 int main(int argc, char const *argv[])
 {
+    test_literals();
+
     test_rationals();
     test_rationals_1();
 
