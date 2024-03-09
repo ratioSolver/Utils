@@ -2,70 +2,70 @@
 
 namespace utils
 {
-    constexpr lin lin::operator+(const lin &right) const noexcept
+    lin lin::operator+(const lin &right) const noexcept
     {
         lin result = *this;
         result += right;
         return result;
     }
 
-    constexpr lin lin::operator+(const rational &right) const noexcept
+    lin lin::operator+(const rational &right) const noexcept
     {
         lin result = *this;
         result += right;
         return result;
     }
 
-    constexpr lin operator+(const rational &left, const lin &right) noexcept
+    lin operator+(const rational &left, const lin &right) noexcept
     {
         lin result = right;
         result += left;
         return result;
     }
 
-    constexpr lin lin::operator-(const lin &right) const noexcept
+    lin lin::operator-(const lin &right) const noexcept
     {
         lin result = *this;
         result -= right;
         return result;
     }
 
-    constexpr lin lin::operator-(const rational &right) const noexcept
+    lin lin::operator-(const rational &right) const noexcept
     {
         lin result = *this;
         result -= right;
         return result;
     }
 
-    constexpr lin operator-(const rational &left, const lin &right) noexcept
+    lin operator-(const rational &left, const lin &right) noexcept
     {
         lin result = -right;
         result += left;
         return result;
     }
 
-    constexpr lin lin::operator*(const rational &right) const noexcept
+    lin lin::operator*(const rational &right) const noexcept
     {
         lin result = *this;
         result *= right;
         return result;
     }
 
-    constexpr lin operator*(const rational &left, const lin &right) noexcept
+    lin operator*(const rational &left, const lin &right) noexcept
     {
         lin result = right;
         result *= left;
         return result;
     }
 
-    constexpr lin lin::operator/(const rational &right) const noexcept
+    lin lin::operator/(const rational &right) const noexcept
     {
         lin result = *this;
         result /= right;
         return result;
     }
 
-    constexpr lin &lin::operator+=(const lin &right) noexcept
+    lin &lin::operator+=(const lin &right) noexcept
     {
         for (const auto &term : right.vars)
             if (const auto trm_it = vars.find(term.first); trm_it == vars.cend())
@@ -80,13 +80,13 @@ namespace utils
         return *this;
     }
 
-    constexpr lin &lin::operator+=(const rational &right) noexcept
+    lin &lin::operator+=(const rational &right) noexcept
     {
         known_term += right;
         return *this;
     }
 
-    constexpr lin &lin::operator-=(const lin &right) noexcept
+    lin &lin::operator-=(const lin &right) noexcept
     {
         for (const auto &term : right.vars)
             if (const auto trm_it = vars.find(term.first); trm_it == vars.cend())
@@ -101,13 +101,13 @@ namespace utils
         return *this;
     }
 
-    constexpr lin &lin::operator-=(const rational &right) noexcept
+    lin &lin::operator-=(const rational &right) noexcept
     {
         known_term -= right;
         return *this;
     }
 
-    constexpr lin &lin::operator*=(const rational &right) noexcept
+    lin &lin::operator*=(const rational &right) noexcept
     {
         if (right == 0)
         {
@@ -123,7 +123,7 @@ namespace utils
         return *this;
     }
 
-    constexpr lin &lin::operator/=(const rational &right) noexcept
+    lin &lin::operator/=(const rational &right) noexcept
     {
         if (is_infinite(right))
         {
@@ -139,14 +139,14 @@ namespace utils
         return *this;
     }
 
-    constexpr lin lin::operator-() const noexcept
+    lin lin::operator-() const noexcept
     {
         lin result = *this;
         result *= -rational::one;
         return result;
     }
 
-    constexpr lin &lin::substitute(const VARIABLE_TYPE v, const lin &right) noexcept
+    lin &lin::substitute(const VARIABLE_TYPE v, const lin &right) noexcept
     {
         rational c = vars.at(v);
         vars.erase(v);
