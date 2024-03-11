@@ -47,7 +47,7 @@ message(STATUS "Integer type: ${INTEGER_TYPE}")
 message(STATUS "Variable type: ${VARIABLE_TYPE}")
 message(STATUS "Logging level: ${LOGGING_LEVEL}")
 
-add_library(${PROJECT_NAME} src/rational.cpp src/lin.cpp src/tableau.cpp)
+add_library(${PROJECT_NAME} src/rational.cpp src/inf_rational.cpp src/lin.cpp src/tableau.cpp)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE=${INTEGER_TYPE} VARIABLE_TYPE=${VARIABLE_TYPE} LOGGING_LEVEL=${LOG_LEVEL})

@@ -7,6 +7,8 @@ namespace utils
   class inf_rational
   {
   public:
+    static const inf_rational epsilon;
+
     explicit inf_rational() = default;
     explicit inf_rational(INTEGER_TYPE nun) noexcept : rat(nun) {}
     explicit inf_rational(const rational &rat) noexcept : rat(rat) {}
