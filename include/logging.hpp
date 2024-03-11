@@ -8,8 +8,8 @@
 #define LOG_INFO_LEVEL 5
 #define LOG_TRACE_LEVEL 6
 
-#ifndef LOG_LEVEL
-#define LOG_LEVEL LOG_OFF_LEVEL
+#ifndef LOGGING_LEVEL
+#define LOGGING_LEVEL LOG_OFF_LEVEL
 #else
 #include <iostream>
 
@@ -30,37 +30,37 @@
 #endif
 #endif
 
-#if LOG_LEVEL >= LOG_FATAL_LEVEL
+#if LOGGING_LEVEL < LOG_FATAL_LEVEL
 #define LOG_FATAL(msg) std::cerr << COLOR_BOLD_RED << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_FATAL(msg) {}
 #endif
 
-#if LOG_LEVEL >= LOG_ERR_LEVEL
+#if LOGGING_LEVEL < LOG_ERR_LEVEL
 #define LOG_ERR(msg) std::cerr << COLOR_RED << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_ERR(msg) {}
 #endif
 
-#if LOG_LEVEL >= LOG_WARN_LEVEL
+#if LOGGING_LEVEL < LOG_WARN_LEVEL
 #define LOG_WARN(msg) std::cerr << COLOR_YELLOW << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_WARN(msg) {}
 #endif
 
-#if LOG_LEVEL >= LOG_DEBUG_LEVEL
+#if LOGGING_LEVEL < LOG_DEBUG_LEVEL
 #define LOG_DEBUG(msg) std::cerr << COLOR_GREEN << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_DEBUG(msg) {}
 #endif
 
-#if LOG_LEVEL >= LOG_INFO_LEVEL
+#if LOGGING_LEVEL < LOG_INFO_LEVEL
 #define LOG_INFO(msg) std::cerr << COLOR_NORMAL << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_INFO(msg) {}
 #endif
 
-#if LOG_LEVEL >= LOG_TRACE_LEVEL
+#if LOGGING_LEVEL < LOG_TRACE_LEVEL
 #define LOG_TRACE(msg) std::cerr << COLOR_BLUE << __FILE__ << "(" << __LINE__ << "): " << msg << COLOR_NORMAL << std::endl
 #else
 #define LOG_TRACE(msg) {}
