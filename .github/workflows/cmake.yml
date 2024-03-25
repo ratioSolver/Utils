@@ -20,9 +20,13 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Install dependencies
+      - name: Install dependencies (Ubuntu)
         if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y lcov
+
+      - name: Install dependencies (macOS)
+        if: matrix.build_type == 'Debug' && matrix.os == 'macos-latest'
+        run: brew install lcov
 
       - name: Configure CMake (Debug)
         if: matrix.build_type == 'Debug'
