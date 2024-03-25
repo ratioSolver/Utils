@@ -36,12 +36,12 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Test with coverage
-        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
+        if: matrix.build_type == 'Debug' && matrix.os != 'windows-latest'
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure -T Test -T Coverage
 
       - name: Test without coverage
-        if: matrix.build_type == 'Release' || matrix.os != 'ubuntu-latest'
+        if: matrix.build_type == 'Release' || matrix.os == 'windows-latest'
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure -T Test
 
