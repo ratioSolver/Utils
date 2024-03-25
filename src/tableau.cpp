@@ -38,7 +38,7 @@ namespace utils
         // we update the rows that contain `y_j`
         for (auto &x : watches[y_j])
         {
-            rational &c = table[x].vars.at(y_j);
+            c = table[x].vars.at(y_j);
             table[x].vars.erase(y_j);
             for (const auto &term : l.vars)
                 if (const auto trm_it = table[x].vars.find(term.first); trm_it == table[x].vars.cend())
