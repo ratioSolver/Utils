@@ -24,10 +24,6 @@ jobs:
         if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
         run: sudo apt-get install -y lcov
 
-      - name: Install dependencies (macOS)
-        if: matrix.build_type == 'Debug' && matrix.os == 'macos-latest'
-        run: brew install lcov
-
       - name: Configure CMake (Debug)
         if: matrix.build_type == 'Debug'
         run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
@@ -40,17 +36,17 @@ jobs:
         run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
 
       - name: Test with coverage
-        if: matrix.build_type == 'Debug' && matrix.os != 'windows-latest'
+        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure -T Test -T Coverage
 
       - name: Test without coverage
-        if: matrix.build_type == 'Release' || matrix.os == 'windows-latest'
+        if: matrix.build_type == 'Release' || matrix.os != 'ubuntu-latest'
         working-directory: ${{github.workspace}}/build
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure -T Test
 
       - name: Make coverage report
-        if: matrix.build_type == 'Debug' && matrix.os != 'windows-latest'
+        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
         run: |
           lcov --capture --directory ${{github.workspace}}/build --output-file coverage.info
           lcov --remove coverage.info '/usr/*' --output-file coverage.info
