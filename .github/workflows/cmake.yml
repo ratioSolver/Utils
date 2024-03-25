@@ -46,7 +46,7 @@ jobs:
         run: ctest -C ${{env.BUILD_TYPE}} --rerun-failed --output-on-failure -T Test
 
       - name: Make coverage report
-        if: matrix.build_type == 'Debug' && matrix.os == 'ubuntu-latest'
+        if: matrix.build_type == 'Debug' && matrix.os != 'windows-latest'
         run: |
           lcov --capture --directory ${{github.workspace}}/build --output-file coverage.info
           lcov --remove coverage.info '/usr/*' --output-file coverage.info
