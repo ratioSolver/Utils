@@ -19,6 +19,7 @@ namespace utils
     [[nodiscard]] rational get_rational() const noexcept { return rat; }
     [[nodiscard]] rational get_infinitesimal() const noexcept { return inf; }
 
+    [[nodiscard]] inline friend bool is_integer(const inf_rational &rhs) noexcept { return is_integer(rhs.rat) && is_zero(rhs.inf); }
     [[nodiscard]] inline friend bool is_zero(const inf_rational &rhs) noexcept { return is_zero(rhs.rat) && is_zero(rhs.inf); }
     [[nodiscard]] inline friend bool is_positive(const inf_rational &rhs) noexcept { return is_positive(rhs.rat) || (is_zero(rhs.rat) && is_positive(rhs.inf)); }
     [[nodiscard]] inline friend bool is_positive_or_zero(const inf_rational &rhs) noexcept { return is_positive(rhs.rat) || (is_zero(rhs.rat) && is_positive_or_zero(rhs.inf)); }
