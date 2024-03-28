@@ -2,63 +2,63 @@
 
 namespace utils
 {
-    lin lin::operator+(const lin &right) const noexcept
+    [[nodiscard]] lin lin::operator+(const lin &right) const noexcept
     {
         lin result = *this;
         result += right;
         return result;
     }
 
-    lin lin::operator+(const rational &right) const noexcept
+    [[nodiscard]] lin lin::operator+(const rational &right) const noexcept
     {
         lin result = *this;
         result += right;
         return result;
     }
 
-    lin operator+(const rational &left, const lin &right) noexcept
+    [[nodiscard]] lin operator+(const rational &left, const lin &right) noexcept
     {
         lin result = right;
         result += left;
         return result;
     }
 
-    lin lin::operator-(const lin &right) const noexcept
+    [[nodiscard]] lin lin::operator-(const lin &right) const noexcept
     {
         lin result = *this;
         result -= right;
         return result;
     }
 
-    lin lin::operator-(const rational &right) const noexcept
+    [[nodiscard]] lin lin::operator-(const rational &right) const noexcept
     {
         lin result = *this;
         result -= right;
         return result;
     }
 
-    lin operator-(const rational &left, const lin &right) noexcept
+    [[nodiscard]] lin operator-(const rational &left, const lin &right) noexcept
     {
         lin result = -right;
         result += left;
         return result;
     }
 
-    lin lin::operator*(const rational &right) const noexcept
+    [[nodiscard]] lin lin::operator*(const rational &right) const noexcept
     {
         lin result = *this;
         result *= right;
         return result;
     }
 
-    lin operator*(const rational &left, const lin &right) noexcept
+    [[nodiscard]] lin operator*(const rational &left, const lin &right) noexcept
     {
         lin result = right;
         result *= left;
         return result;
     }
 
-    lin lin::operator/(const rational &right) const noexcept
+    [[nodiscard]] lin lin::operator/(const rational &right) const noexcept
     {
         lin result = *this;
         result /= right;
@@ -139,7 +139,7 @@ namespace utils
         return *this;
     }
 
-    lin lin::operator-() const noexcept
+    [[nodiscard]] lin lin::operator-() const noexcept
     {
         lin result = *this;
         result *= -rational::one;

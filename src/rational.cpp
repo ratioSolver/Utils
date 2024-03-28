@@ -305,10 +305,10 @@ namespace utils
         return operator*=(rec);
     }
 
-    rational operator+(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
-    rational operator-(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
-    rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
-    rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
+    [[nodiscard]] rational operator+(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
+    [[nodiscard]] rational operator-(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
+    [[nodiscard]] rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
+    [[nodiscard]] rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
 
     rational rational::operator-() const noexcept
     {

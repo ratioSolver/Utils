@@ -24,7 +24,7 @@ namespace utils
     /**
      * @brief Create a new variable.
      */
-    VARIABLE_TYPE new_var();
+    [[nodiscard]] VARIABLE_TYPE new_var();
 
     /**
      * @brief Add a new row to the tableau.
