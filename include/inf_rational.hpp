@@ -7,6 +7,7 @@ namespace utils
   class inf_rational
   {
   public:
+    static const inf_rational zero;
     static const inf_rational epsilon;
 
     explicit inf_rational() = default;

@@ -2,5 +2,6 @@
 
 namespace utils
 {
+    const inf_rational inf_rational::zero = inf_rational();
     const inf_rational inf_rational::epsilon = inf_rational(rational::zero, 1);
 } // namespace utils
