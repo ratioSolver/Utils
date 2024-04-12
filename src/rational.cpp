@@ -310,6 +310,13 @@ namespace utils
     [[nodiscard]] rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
     [[nodiscard]] rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
 
+    [[nodiscard]] bool operator!=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
+    [[nodiscard]] bool operator<(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
+    [[nodiscard]] bool operator<=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
+    [[nodiscard]] bool operator==(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
+    [[nodiscard]] bool operator>=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
+    [[nodiscard]] bool operator>(const INTEGER_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
+
     rational rational::operator-() const noexcept
     {
         rational res(*this);

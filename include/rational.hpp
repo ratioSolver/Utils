@@ -69,6 +69,13 @@ namespace utils
     friend rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
     friend rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
 
+    friend bool operator!=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator==(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+
     [[nodiscard]] rational operator-() const noexcept;
 
   private:
