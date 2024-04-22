@@ -18,7 +18,7 @@ namespace utils
                 tick_time += std::chrono::milliseconds(tick_duration);
             } });
     }
-extern/plexa/src/timer.cpp
+
     void timer::stop()
     {
         executing.store(false, std::memory_order_release);
