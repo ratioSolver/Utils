@@ -13,11 +13,11 @@ namespace utils
     static const rational negative_infinite;
 
     explicit rational() noexcept;
-    explicit rational(INTEGER_TYPE n) noexcept;
-    explicit rational(INTEGER_TYPE n, INTEGER_TYPE d) noexcept;
+    explicit rational(INT_TYPE n) noexcept;
+    explicit rational(INT_TYPE n, INT_TYPE d) noexcept;
 
-    [[nodiscard]] INTEGER_TYPE numerator() const noexcept { return num; }
-    [[nodiscard]] INTEGER_TYPE denominator() const noexcept { return den; }
+    [[nodiscard]] INT_TYPE numerator() const noexcept { return num; }
+    [[nodiscard]] INT_TYPE denominator() const noexcept { return den; }
 
     [[nodiscard]] inline friend bool is_integer(const rational &rhs) noexcept { return rhs.den == 1; }
     [[nodiscard]] inline friend bool is_zero(const rational &rhs) noexcept { return rhs.num == 0; }
@@ -37,44 +37,44 @@ namespace utils
     [[nodiscard]] bool operator>=(const rational &rhs) const noexcept;
     [[nodiscard]] bool operator>(const rational &rhs) const noexcept;
 
-    [[nodiscard]] bool operator!=(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] bool operator<(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] bool operator<=(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] bool operator==(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] bool operator>=(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] bool operator>(const INTEGER_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator!=(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator<(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator<=(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator==(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator>=(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] bool operator>(const INT_TYPE &rhs) const noexcept;
 
     [[nodiscard]] rational operator+(const rational &rhs) const noexcept;
     [[nodiscard]] rational operator-(const rational &rhs) const noexcept;
     [[nodiscard]] rational operator*(const rational &rhs) const noexcept;
     [[nodiscard]] rational operator/(const rational &rhs) const noexcept;
 
-    [[nodiscard]] rational operator+(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] rational operator-(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] rational operator*(const INTEGER_TYPE &rhs) const noexcept;
-    [[nodiscard]] rational operator/(const INTEGER_TYPE &rhs) const noexcept;
+    [[nodiscard]] rational operator+(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] rational operator-(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] rational operator*(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] rational operator/(const INT_TYPE &rhs) const noexcept;
 
     rational &operator+=(const rational &rhs) noexcept;
     rational &operator-=(const rational &rhs) noexcept;
     rational &operator*=(const rational &rhs) noexcept;
     rational &operator/=(const rational &rhs) noexcept;
 
-    rational &operator+=(const INTEGER_TYPE &rhs) noexcept;
-    rational &operator-=(const INTEGER_TYPE &rhs) noexcept;
-    rational &operator*=(const INTEGER_TYPE &rhs) noexcept;
-    rational &operator/=(const INTEGER_TYPE &rhs) noexcept;
+    rational &operator+=(const INT_TYPE &rhs) noexcept;
+    rational &operator-=(const INT_TYPE &rhs) noexcept;
+    rational &operator*=(const INT_TYPE &rhs) noexcept;
+    rational &operator/=(const INT_TYPE &rhs) noexcept;
 
-    friend rational operator+(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator-(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator*(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator/(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
-    friend bool operator!=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator<(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator<=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator==(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator>=(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator>(const INTEGER_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
     [[nodiscard]] rational operator-() const noexcept;
 
@@ -84,7 +84,7 @@ namespace utils
     friend std::string to_string(const rational &rhs) noexcept;
 
   private:
-    INTEGER_TYPE num; // the numerator..
-    INTEGER_TYPE den; // the denominator..
+    INT_TYPE num; // the numerator..
+    INT_TYPE den; // the denominator..
   };
 } // namespace utils

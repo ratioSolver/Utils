@@ -11,10 +11,10 @@ namespace utils
     static const inf_rational epsilon;
 
     explicit inf_rational() = default;
-    explicit inf_rational(INTEGER_TYPE nun) noexcept : rat(nun) {}
+    explicit inf_rational(INT_TYPE nun) noexcept : rat(nun) {}
     explicit inf_rational(const rational &rat) noexcept : rat(rat) {}
-    explicit inf_rational(INTEGER_TYPE nun, INTEGER_TYPE den) noexcept : rat(nun, den) {}
-    explicit inf_rational(const rational &rat, INTEGER_TYPE inf) noexcept : rat(rat), inf(inf) {}
+    explicit inf_rational(INT_TYPE nun, INT_TYPE den) noexcept : rat(nun, den) {}
+    explicit inf_rational(const rational &rat, INT_TYPE inf) noexcept : rat(rat), inf(inf) {}
     explicit inf_rational(const rational &rat, const rational &inf) noexcept : rat(rat), inf(inf) {}
 
     [[nodiscard]] rational get_rational() const noexcept { return rat; }
@@ -44,12 +44,12 @@ namespace utils
     [[nodiscard]] inline bool operator>=(const rational &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive_or_zero(inf)); };
     [[nodiscard]] inline bool operator>(const rational &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive(inf)); };
 
-    [[nodiscard]] inline bool operator!=(const INTEGER_TYPE &rhs) const noexcept { return rat != rhs || !is_zero(inf); };
-    [[nodiscard]] inline bool operator<(const INTEGER_TYPE &rhs) const noexcept { return rat < rhs || (rat == rhs && is_negative(inf)); };
-    [[nodiscard]] inline bool operator<=(const INTEGER_TYPE &rhs) const noexcept { return rat < rhs || (rat == rhs && is_negative_or_zero(inf)); };
-    [[nodiscard]] inline bool operator==(const INTEGER_TYPE &rhs) const noexcept { return rat == rhs && is_zero(inf); };
-    [[nodiscard]] inline bool operator>=(const INTEGER_TYPE &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive_or_zero(inf)); };
-    [[nodiscard]] inline bool operator>(const INTEGER_TYPE &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive(inf)); };
+    [[nodiscard]] inline bool operator!=(const INT_TYPE &rhs) const noexcept { return rat != rhs || !is_zero(inf); };
+    [[nodiscard]] inline bool operator<(const INT_TYPE &rhs) const noexcept { return rat < rhs || (rat == rhs && is_negative(inf)); };
+    [[nodiscard]] inline bool operator<=(const INT_TYPE &rhs) const noexcept { return rat < rhs || (rat == rhs && is_negative_or_zero(inf)); };
+    [[nodiscard]] inline bool operator==(const INT_TYPE &rhs) const noexcept { return rat == rhs && is_zero(inf); };
+    [[nodiscard]] inline bool operator>=(const INT_TYPE &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive_or_zero(inf)); };
+    [[nodiscard]] inline bool operator>(const INT_TYPE &rhs) const noexcept { return rat > rhs || (rat == rhs && is_positive(inf)); };
 
     [[nodiscard]] inline inf_rational operator+(const inf_rational &rhs) const noexcept { return inf_rational(rat + rhs.rat, inf + rhs.inf); };
     [[nodiscard]] inline inf_rational operator-(const inf_rational &rhs) const noexcept { return inf_rational(rat - rhs.rat, inf - rhs.inf); };
@@ -59,10 +59,10 @@ namespace utils
     [[nodiscard]] inline inf_rational operator*(const rational &rhs) const noexcept { return inf_rational(rat * rhs, inf * rhs); };
     [[nodiscard]] inline inf_rational operator/(const rational &rhs) const noexcept { return inf_rational(rat / rhs, inf / rhs); };
 
-    [[nodiscard]] inline inf_rational operator+(const INTEGER_TYPE &rhs) const noexcept { return inf_rational(rat + rhs, inf); };
-    [[nodiscard]] inline inf_rational operator-(const INTEGER_TYPE &rhs) const noexcept { return inf_rational(rat - rhs, inf); };
-    [[nodiscard]] inline inf_rational operator*(const INTEGER_TYPE &rhs) const noexcept { return inf_rational(rat * rhs, inf * rhs); };
-    [[nodiscard]] inline inf_rational operator/(const INTEGER_TYPE &rhs) const noexcept { return inf_rational(rat / rhs, inf / rhs); };
+    [[nodiscard]] inline inf_rational operator+(const INT_TYPE &rhs) const noexcept { return inf_rational(rat + rhs, inf); };
+    [[nodiscard]] inline inf_rational operator-(const INT_TYPE &rhs) const noexcept { return inf_rational(rat - rhs, inf); };
+    [[nodiscard]] inline inf_rational operator*(const INT_TYPE &rhs) const noexcept { return inf_rational(rat * rhs, inf * rhs); };
+    [[nodiscard]] inline inf_rational operator/(const INT_TYPE &rhs) const noexcept { return inf_rational(rat / rhs, inf / rhs); };
 
     inline inf_rational &operator+=(const inf_rational &rhs) noexcept
     {
@@ -100,23 +100,23 @@ namespace utils
       return *this;
     }
 
-    inline inf_rational &operator+=(const INTEGER_TYPE &rhs) noexcept
+    inline inf_rational &operator+=(const INT_TYPE &rhs) noexcept
     {
       rat += rhs;
       return *this;
     }
-    inline inf_rational &operator-=(const INTEGER_TYPE &rhs) noexcept
+    inline inf_rational &operator-=(const INT_TYPE &rhs) noexcept
     {
       rat -= rhs;
       return *this;
     }
-    inline inf_rational &operator*=(const INTEGER_TYPE &rhs) noexcept
+    inline inf_rational &operator*=(const INT_TYPE &rhs) noexcept
     {
       rat *= rhs;
       inf *= rhs;
       return *this;
     }
-    inline inf_rational &operator/=(const INTEGER_TYPE &rhs) noexcept
+    inline inf_rational &operator/=(const INT_TYPE &rhs) noexcept
     {
       rat /= rhs;
       inf /= rhs;
@@ -130,10 +130,10 @@ namespace utils
     [[nodiscard]] inline friend inf_rational operator*(const rational &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs * rhs.rat, lhs * rhs.inf); }
     [[nodiscard]] inline friend inf_rational operator/(const rational &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs / rhs.rat, lhs / rhs.inf); }
 
-    [[nodiscard]] inline friend inf_rational operator+(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs + rhs.rat, rhs.inf); }
-    [[nodiscard]] inline friend inf_rational operator-(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs - rhs.rat, rhs.inf); }
-    [[nodiscard]] inline friend inf_rational operator*(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs * rhs.rat, lhs * rhs.inf); }
-    [[nodiscard]] inline friend inf_rational operator/(const INTEGER_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs / rhs.rat, lhs / rhs.inf); }
+    [[nodiscard]] inline friend inf_rational operator+(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs + rhs.rat, rhs.inf); }
+    [[nodiscard]] inline friend inf_rational operator-(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs - rhs.rat, rhs.inf); }
+    [[nodiscard]] inline friend inf_rational operator*(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs * rhs.rat, lhs * rhs.inf); }
+    [[nodiscard]] inline friend inf_rational operator/(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs / rhs.rat, lhs / rhs.inf); }
 
     friend std::string to_string(const inf_rational &rhs) noexcept
     {

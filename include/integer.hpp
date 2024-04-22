@@ -4,5 +4,5 @@
 
 namespace utils
 {
-  [[nodiscard]] constexpr INTEGER_TYPE inf() noexcept { return std::numeric_limits<INTEGER_TYPE>::max() / 2 - 1; }
+  [[nodiscard]] constexpr INT_TYPE inf() noexcept { return std::numeric_limits<INT_TYPE>::max() / 2 - 1; }
 } // namespace utils
