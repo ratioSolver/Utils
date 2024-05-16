@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cstdint>
 #include "sha1.hpp"
 #include "base64.hpp"
 
