@@ -8,5 +8,8 @@ Currently implemented utilities are:
  - Logging macros, including logging capabilities for some containers
  - Cartesian product of containers
  - Combinations of given size from a container
+ - Propositional literals
  - Rationals
  - Infinitesimal rationals
+ - Base64 encoding and decoding
+ - SHA1 hashing
