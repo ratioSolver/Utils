@@ -4,6 +4,7 @@
 #include "lit.hpp"
 #include "lin.hpp"
 #include "tableau.hpp"
+#include "loss.hpp"
 
 void test_literals()
 {
@@ -242,6 +243,15 @@ void test_tableau()
     t.pivot(x0, x1);
 }
 
+void test_loss()
+{
+    float *y_true = new float[3]{1, 2, 3};
+    float *y_pred = new float[3]{1, 2, 3};
+
+    assert(utils::mse(y_true, y_pred, 3) == 0);
+    assert(utils::mae(y_true, y_pred, 3) == 0);
+}
+
 int main(int argc, char const *argv[])
 {
     test_literals();
@@ -254,6 +264,8 @@ int main(int argc, char const *argv[])
     test_lin();
 
     test_tableau();
+
+    test_loss();
 
     return 0;
 }
