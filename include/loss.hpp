@@ -17,7 +17,7 @@ namespace utils
    * @return The computed Mean Squared Error.
    */
   template <typename T>
-  [[nodiscard]] T mse(const T *y_true, const T *y_pred, const std::size_t n)
+  [[nodiscard]] double mse(const T *y_true, const T *y_pred, const std::size_t n)
   {
     double sum = 0;
     for (std::size_t i = 0; i < n; i++)
@@ -38,7 +38,7 @@ namespace utils
    * @return The computed Mean Absolute Error.
    */
   template <typename T>
-  [[nodiscard]] T mae(const T *y_true, const T *y_pred, const std::size_t n)
+  [[nodiscard]] double mae(const T *y_true, const T *y_pred, const std::size_t n)
   {
     double sum = 0;
     for (std::size_t i = 0; i < n; i++)
