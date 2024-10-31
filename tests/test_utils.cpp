@@ -245,11 +245,11 @@ void test_tableau()
 
 void test_loss()
 {
-    float *y_true = new float[3]{1, 2, 3};
-    float *y_pred = new float[3]{1, 2, 3};
+    std::vector<float> y_true{1, 2, 3};
+    std::vector<float> y_pred{1, 2, 3};
 
-    assert(utils::mse(y_true, y_pred, 3) == 0);
-    assert(utils::mae(y_true, y_pred, 3) == 0);
+    assert(utils::mse(y_true.data(), y_pred.data(), 3) == 0);
+    assert(utils::mae(y_true.data(), y_pred.data(), 3) == 0);
 }
 
 int main(int argc, char const *argv[])
