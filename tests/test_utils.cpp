@@ -5,6 +5,7 @@
 #include "lin.hpp"
 #include "tableau.hpp"
 #include "loss.hpp"
+#include "matrix.hpp"
 
 void test_literals()
 {
@@ -243,6 +244,18 @@ void test_tableau()
     t.pivot(x0, x1);
 }
 
+void test_matrix()
+{
+    utils::matrix<2, 3, int> m1 = {{{1, 2, 3}, {4, 5, 6}}};
+    utils::matrix<3, 2, int> m2 = {{{1, 2}, {3, 4}, {5, 6}}};
+    utils::matrix<2, 2, int> m3 = utils::matmul(m1, utils::transpose(m2));
+
+    assert(m3[0][0] == 22);
+    assert(m3[0][1] == 28);
+    assert(m3[1][0] == 49);
+    assert(m3[1][1] == 64);
+}
+
 void test_loss()
 {
     std::vector<float> y_true{1, 2, 3};
@@ -266,6 +279,8 @@ int main(int argc, char const *argv[])
     test_tableau();
 
     test_loss();
+
+    test_matrix();
 
     return 0;
 }
