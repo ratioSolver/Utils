@@ -3,13 +3,13 @@
 
 namespace utils
 {
-    VARIABLE_TYPE tableau::new_var()
+    std::size_t tableau::new_var()
     {
-        watches.push_back(std::set<VARIABLE_TYPE>());
-        return static_cast<VARIABLE_TYPE>(watches.size() - 1);
+        watches.push_back(std::set<std::size_t>());
+        return static_cast<std::size_t>(watches.size() - 1);
     }
 
-    void tableau::add_row(const VARIABLE_TYPE x_i, lin &&expr)
+    void tableau::add_row(const std::size_t x_i, lin &&expr)
     {
         assert(table.find(x_i) == table.cend());
         for (const auto &x : expr.vars)
@@ -17,7 +17,7 @@ namespace utils
         table.emplace(x_i, std::move(expr));
     }
 
-    void tableau::pivot(const VARIABLE_TYPE x_i, const VARIABLE_TYPE y_j) noexcept
+    void tableau::pivot(const std::size_t x_i, const std::size_t y_j) noexcept
     { // `x_i` is the leaving variable, `y_j` is the entering variable
         assert(table.find(x_i) != table.cend() && "x_i is not a basic variable");
         assert(watches[x_i].empty() && "x_i is should not be in any other row of the tableau");

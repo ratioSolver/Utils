@@ -28,7 +28,7 @@ namespace utils
      * @param v the variable of the linear expression.
      * @param c the coefficient of the `v` variable.
      */
-    explicit lin(const VARIABLE_TYPE v, const rational &c) { vars.emplace(v, c); }
+    explicit lin(const std::size_t v, const rational &c) { vars.emplace(v, c); }
 
   public:
     [[nodiscard]] lin operator+(const lin &rhs) const noexcept;
@@ -59,12 +59,12 @@ namespace utils
     /**
      * @brief Substitute the variable `v` with the linear expression `rhs`.
      */
-    [[nodiscard]] lin &substitute(const VARIABLE_TYPE v, const lin &rhs) noexcept;
+    [[nodiscard]] lin &substitute(const std::size_t v, const lin &rhs) noexcept;
 
     friend std::string to_string(const lin &rhs) noexcept;
 
   public:
-    std::map<const VARIABLE_TYPE, rational> vars;
+    std::map<const std::size_t, rational> vars;
     rational known_term;
   };
 } // namespace utils

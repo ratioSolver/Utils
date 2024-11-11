@@ -24,7 +24,7 @@ namespace utils
     /**
      * @brief Create a new variable.
      */
-    [[nodiscard]] VARIABLE_TYPE new_var();
+    [[nodiscard]] std::size_t new_var();
 
     /**
      * @brief Add a new row to the tableau.
@@ -32,7 +32,7 @@ namespace utils
      * @param x_i the variable of the row.
      * @param expr the linear expression of the row.
      */
-    void add_row(const VARIABLE_TYPE x_i, lin &&expr);
+    void add_row(const std::size_t x_i, lin &&expr);
 
     /**
      * @brief Pivot the tableau using the variable `x_i` and the variable `y_j`.
@@ -44,12 +44,12 @@ namespace utils
      * @param x_i the leaving variable.
      * @param y_j the entering variable.
      */
-    void pivot(const VARIABLE_TYPE x_i, const VARIABLE_TYPE y_j) noexcept;
+    void pivot(const std::size_t x_i, const std::size_t y_j) noexcept;
 
     friend std::string to_string(const tableau &t) noexcept;
 
   private:
-    std::map<const VARIABLE_TYPE, lin> table;
-    std::vector<std::set<VARIABLE_TYPE>> watches;
+    std::map<const std::size_t, lin> table;
+    std::vector<std::set<std::size_t>> watches;
   };
 } // namespace utils

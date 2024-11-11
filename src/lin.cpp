@@ -146,7 +146,7 @@ namespace utils
         return result;
     }
 
-    lin &lin::substitute(const VARIABLE_TYPE v, const lin &right) noexcept
+    lin &lin::substitute(const std::size_t v, const lin &right) noexcept
     {
         rational c = vars.at(v);
         vars.erase(v);
