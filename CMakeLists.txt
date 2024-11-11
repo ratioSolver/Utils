@@ -36,13 +36,12 @@ elseif(LOGGING_LEVEL STREQUAL "FATAL")
 endif()
 
 message(STATUS "Integer type: ${INT_TYPE}")
-message(STATUS "Variable type: ${std::size_t}")
 message(STATUS "Logging level: ${LOGGING_LEVEL}")
 
 add_library(utils src/rational.cpp src/inf_rational.cpp src/lin.cpp src/tableau.cpp src/timer.cpp)
 target_compile_features(utils PUBLIC cxx_std_17)
 target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
-target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} std::size_t=${std::size_t} LOGGING_LEVEL=${LOG_LEVEL})
+target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
