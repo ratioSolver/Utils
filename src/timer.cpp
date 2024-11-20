@@ -7,8 +7,7 @@ namespace utils
 
     void timer::start()
     {
-        if (executing.exchange(true, std::memory_order_acq_rel))
-            stop();
+        executing.store(true, std::memory_order_release);
         tick_time = std::chrono::steady_clock::now() + std::chrono::milliseconds(tick_duration);
         th = std::thread([this]()
                          {
