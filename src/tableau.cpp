@@ -5,7 +5,7 @@ namespace utils
 {
     var tableau::new_var()
     {
-        watches.push_back(std::set<var>());
+        watches.emplace_back(std::set<var>());
         return static_cast<var>(watches.size() - 1);
     }
 
