@@ -265,7 +265,7 @@ void test_loss()
     assert(utils::mae(y_true.data(), y_pred.data(), 3) == 0);
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     test_literals();
 

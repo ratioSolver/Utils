@@ -13,7 +13,7 @@ void test_sha1()
     assert(encoded == "s3pPLMBiTxaQ9kYGzzhZRbK+xOo=");
 }
 
-int main(int argc, char const *argv[])
+int main()
 {
     test_sha1();
 
