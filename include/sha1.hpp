@@ -19,7 +19,7 @@ namespace utils
     typedef unsigned char digest_8[20];
     inline static unsigned int left_rotate(unsigned int value, size_t count) { return (value << count) ^ (value >> (32 - count)); }
 
-    sha1(const std::string &data) { process_bytes(data.data(), data.size()); }
+    sha1(std::string_view data) { process_bytes(data.data(), data.size()); }
 
     /**
      * @brief Retrieves the digest value for a given SHA1 hash.
