@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(utils VERSION 0.2.0 LANGUAGES CXX)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
 include(Sanitizers)
 
 include(CTest)
