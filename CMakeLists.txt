@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.5.0)
 project(utils VERSION 0.2.0 LANGUAGES CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+include(Sanitizers)
+
 include(CTest)
 enable_testing()
 
@@ -46,18 +49,7 @@ if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-if(MSVC)
-    target_compile_options(utils PRIVATE /W4)
-else()
-    target_compile_options(utils PRIVATE -Wall -Wextra -Wpedantic -fsanitize=undefined)
-    target_link_options(utils PRIVATE -fsanitize=undefined)
-    if (ENABLE_COVERAGE)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            target_compile_options(utils PRIVATE --coverage)
-            target_link_libraries(utils PUBLIC gcov)
-        endif()
-    endif()
-endif()
+setup_sanitizers(utils)
 
 set(CPACK_PROJECT_NAME utils)
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
