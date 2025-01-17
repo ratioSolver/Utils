@@ -5,10 +5,6 @@ function(setup_sanitizers target)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
 
-        message(STATUS "Using GCC")
-        message(STATUS "Undefined behavior sanitizer: ${ENABLE_UBSAN}")
-        message(STATUS "Address sanitizer: ${ENABLE_ASAN}")
-
         if (ENABLE_MSAN)
             message(FATAL_ERROR "Memory sanitizer is not supported with GCC")
         endif()
@@ -32,11 +28,6 @@ function(setup_sanitizers target)
             target_compile_options(${target} PRIVATE -fsanitize=${LIST_OF_SANITIZERS})
             target_link_options(${target} PRIVATE -fsanitize=${LIST_OF_SANITIZERS})
         endif()
-
-        get_target_property(MAIN_CFLAGS ${target} COMPILE_OPTIONS)
-        message("-- Target compiler flags are: ${MAIN_CFLAGS}")
-        get_target_property(MAIN_LINK_FLAGS ${target} LINK_OPTIONS)
-        message("-- Target linker flags are: ${MAIN_LINK_FLAGS}")
 
         if (ENABLE_COV)
             message(STATUS "Code coverage enabled for ${target}")
