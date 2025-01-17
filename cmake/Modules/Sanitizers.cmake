@@ -2,7 +2,7 @@
 # A CMake module to simplify sanitizer setup.
 
 function(setup_sanitizers target)
-    if (MSVC AND (ENABLE_MSAN OR ENABLE_USAN))
+    if (MSVC AND (ENABLE_MSAN OR ENABLE_UBSAN))
         message(FATAL_ERROR "Only address sanitizer is supported on Windows")
     endif()
 
@@ -20,7 +20,7 @@ function(setup_sanitizers target)
         list(APPEND SANITIZERS "memory")
     endif()
 
-    if (ENABLE_USAN)
+    if (ENABLE_UBSAN)
         list(APPEND SANITIZERS "undefined")
     endif()
 
