@@ -1,8 +1,10 @@
 add_executable(utils_lib_tests test_utils.cpp)
+add_dependencies(utils_lib_tests utils)
 target_link_libraries(utils_lib_tests PRIVATE utils)
 setup_sanitizers(utils_lib_tests)
 
 add_executable(crypto_tests test_crypto.cpp)
+add_dependencies(crypto_tests utils)
 target_link_libraries(crypto_tests PRIVATE utils)
 setup_sanitizers(crypto_tests)
 

@@ -44,12 +44,11 @@ add_library(utils src/rational.cpp src/inf_rational.cpp src/lin.cpp src/tableau.
 target_compile_features(utils PUBLIC cxx_std_17)
 target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
+setup_sanitizers(utils)
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
-
-setup_sanitizers(utils)
 
 set(CPACK_PROJECT_NAME utils)
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
