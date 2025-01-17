@@ -59,39 +59,39 @@ namespace utils
      *
      * This function returns a pointer to the bytes of the given digest.
      *
-     * @param digest The digest for which to retrieve the bytes.
+     * @param dig The digest for which to retrieve the bytes.
      * @return A pointer to the bytes of the digest.
      */
-    const unsigned char *get_digest_bytes(digest_8 digest)
+    const unsigned char *get_digest_bytes(digest_8 dig)
     {
       digest_32 d32;
       get_digest(d32);
       size_t di = 0;
-      digest[di++] = ((d32[0] >> 24) & 0xFF);
-      digest[di++] = ((d32[0] >> 16) & 0xFF);
-      digest[di++] = ((d32[0] >> 8) & 0xFF);
-      digest[di++] = ((d32[0]) & 0xFF);
+      dig[di++] = ((d32[0] >> 24) & 0xFF);
+      dig[di++] = ((d32[0] >> 16) & 0xFF);
+      dig[di++] = ((d32[0] >> 8) & 0xFF);
+      dig[di++] = ((d32[0]) & 0xFF);
 
-      digest[di++] = ((d32[1] >> 24) & 0xFF);
-      digest[di++] = ((d32[1] >> 16) & 0xFF);
-      digest[di++] = ((d32[1] >> 8) & 0xFF);
-      digest[di++] = ((d32[1]) & 0xFF);
+      dig[di++] = ((d32[1] >> 24) & 0xFF);
+      dig[di++] = ((d32[1] >> 16) & 0xFF);
+      dig[di++] = ((d32[1] >> 8) & 0xFF);
+      dig[di++] = ((d32[1]) & 0xFF);
 
-      digest[di++] = ((d32[2] >> 24) & 0xFF);
-      digest[di++] = ((d32[2] >> 16) & 0xFF);
-      digest[di++] = ((d32[2] >> 8) & 0xFF);
-      digest[di++] = ((d32[2]) & 0xFF);
+      dig[di++] = ((d32[2] >> 24) & 0xFF);
+      dig[di++] = ((d32[2] >> 16) & 0xFF);
+      dig[di++] = ((d32[2] >> 8) & 0xFF);
+      dig[di++] = ((d32[2]) & 0xFF);
 
-      digest[di++] = ((d32[3] >> 24) & 0xFF);
-      digest[di++] = ((d32[3] >> 16) & 0xFF);
-      digest[di++] = ((d32[3] >> 8) & 0xFF);
-      digest[di++] = ((d32[3]) & 0xFF);
+      dig[di++] = ((d32[3] >> 24) & 0xFF);
+      dig[di++] = ((d32[3] >> 16) & 0xFF);
+      dig[di++] = ((d32[3] >> 8) & 0xFF);
+      dig[di++] = ((d32[3]) & 0xFF);
 
-      digest[di++] = ((d32[4] >> 24) & 0xFF);
-      digest[di++] = ((d32[4] >> 16) & 0xFF);
-      digest[di++] = ((d32[4] >> 8) & 0xFF);
-      digest[di++] = ((d32[4]) & 0xFF);
-      return digest;
+      dig[di++] = ((d32[4] >> 24) & 0xFF);
+      dig[di++] = ((d32[4] >> 16) & 0xFF);
+      dig[di++] = ((d32[4] >> 8) & 0xFF);
+      dig[di++] = ((d32[4]) & 0xFF);
+      return dig;
     }
 
   private:

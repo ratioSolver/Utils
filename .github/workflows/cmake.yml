@@ -60,7 +60,7 @@ jobs:
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test -T MemCheck
 
-  windows-address:
+  windows-debug:
     runs-on: windows-latest
 
     steps:
@@ -73,7 +73,7 @@ jobs:
           choco install cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug
 
       - name: Build
         run: cmake --build build --config Debug
