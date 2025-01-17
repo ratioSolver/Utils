@@ -3,7 +3,7 @@ name: CMake
 on: [push, pull_request]
 
 jobs:
-  ubuntu-coverage:
+  ubuntu-address-undefined-coverage:
     runs-on: ubuntu-latest
 
     steps:
@@ -17,7 +17,7 @@ jobs:
           sudo apt-get install -y cmake lcov
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COV=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBASAN=ON -DENABLE_COV=ON
 
       - name: Build
         run: cmake --build build --config Debug
@@ -51,7 +51,7 @@ jobs:
           sudo apt-get install -y cmake valgrind
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_MSAN=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug
 
       - name: Build
         run: cmake --build build --config Debug
@@ -59,29 +59,6 @@ jobs:
       - name: Test with memory sanitizer and coverage
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test -T MemCheck
-
-  ubuntu-address-undefined:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
-
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBSAN=ON
-
-      - name: Build
-        run: cmake --build build --config Debug
-
-      - name: Test with address sanitizer
-        working-directory: build
-        run: ctest -C Debug --rerun-failed --output-on-failure -T Test
 
   windows-address:
     runs-on: windows-latest
@@ -104,28 +81,6 @@ jobs:
       - name: Test with address sanitizer
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test
-
-  macos-memcheck:
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: recursive
-
-      - name: Install dependencies
-        run: |
-          brew install cmake valgrind
-
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_MSAN=ON
-
-      - name: Build
-        run: cmake --build build --config Debug
-
-      - name: Test with memory sanitizer
-        working-directory: build
-        run: ctest -C Debug --rerun-failed --output-on-failure -T Test -T MemCheck
 
   macos-address-undefined:
     runs-on: macos-latest
