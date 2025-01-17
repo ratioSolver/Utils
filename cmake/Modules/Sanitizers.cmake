@@ -5,14 +5,14 @@ function(setup_sanitizers target)
     if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
         target_compile_options(${target} PRIVATE -Wall -Wextra -Wpedantic)
 
+        if (ENABLE_MSAN)
+            message(FATAL_ERROR "Memory sanitizer is not supported with GCC")
+        endif()
+
         set(SANITIZERS "")
 
         if (ENABLE_ASAN)
             list(APPEND SANITIZERS "address")
-        endif()
-
-        if (ENABLE_MSAN)
-            message(FATAL_ERROR "Memory sanitizer is not supported with GCC")
         endif()
 
         if (ENABLE_UBSAN)
@@ -59,12 +59,6 @@ function(setup_sanitizers target)
     elseif(MSVC)
         target_compile_options(${target} PRIVATE /W4)
 
-        set(SANITIZERS "")
-
-        if (ENABLE_ASAN)
-            list(APPEND SANITIZERS "address")
-        endif()
-
         if (ENABLE_MSAN)
             message(FATAL_ERROR "Memory sanitizer is not supported with MSVC")
         endif()
@@ -73,12 +67,10 @@ function(setup_sanitizers target)
             message(FATAL_ERROR "Undefined behavior sanitizer is not supported with MSVC")
         endif()
 
-        list(JOIN SANITIZERS "," LIST_OF_SANITIZERS)
-
-        if(NOT "${LIST_OF_SANITIZERS}" STREQUAL "")
-            message(STATUS "Sanitizers enabled for ${target}: ${LIST_OF_SANITIZERS}")
-            target_compile_options(${target} INTERFACE /fsanitize=${LIST_OF_SANITIZERS})
-            target_link_options(${target} INTERFACE /fsanitize=${LIST_OF_SANITIZERS})
+        if (ENABLE_ASAN)
+            message(STATUS "Address sanitizer enabled for ${target}")
+            target_compile_options(${target} INTERFACE /fsanitize=address)
+            target_link_options(${target} INTERFACE /fsanitize=address)
         endif()
     else()
         message(FATAL_ERROR "Unsupported compiler")

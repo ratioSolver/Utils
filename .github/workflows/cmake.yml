@@ -22,7 +22,7 @@ jobs:
       - name: Build
         run: cmake --build build --config Debug
 
-      - name: Test with coverage
+      - name: Test with address sanitizer, undefined behavior sanitizer and coverage
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test -T Coverage
 
@@ -56,7 +56,7 @@ jobs:
       - name: Build
         run: cmake --build build --config Debug
 
-      - name: Test with memory sanitizer and coverage
+      - name: Test with memory checker
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test -T MemCheck
 
@@ -100,7 +100,7 @@ jobs:
       - name: Build
         run: cmake --build build --config Debug
 
-      - name: Test with address sanitizer
+      - name: Test with address sanitizer and undefined behavior sanitizer
         working-directory: build
         run: ctest -C Debug --rerun-failed --output-on-failure -T Test
 
