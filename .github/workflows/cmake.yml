@@ -28,7 +28,7 @@ jobs:
 
       - name: Configure CMake (Debug)
         if: matrix.build_type == 'Debug'
-        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON
+        run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=Debug -DENABLE_COV=ON
 
       - name: Configure CMake
         if: matrix.build_type != 'Debug'
