@@ -31,4 +31,126 @@ namespace utils
     bool integer::operator==(const INT_TYPE &rhs) const noexcept { return !is_inf && val == rhs; }
     bool integer::operator>=(const INT_TYPE &rhs) const noexcept { return !is_inf || val >= rhs; }
     bool integer::operator>(const INT_TYPE &rhs) const noexcept { return !is_inf && val > rhs; }
+
+    integer integer::operator+(const integer &rhs) const noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return is_inf ? *this : rhs;
+        return integer(val + rhs.val);
+    }
+    integer integer::operator-(const integer &rhs) const noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return is_inf ? *this : rhs;
+        return integer(val - rhs.val);
+    }
+    integer integer::operator*(const integer &rhs) const noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return is_inf ? *this : rhs;
+        return integer(val * rhs.val);
+    }
+    integer integer::operator/(const integer &rhs) const noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return is_inf ? *this : rhs;
+        return integer(val / rhs.val);
+    }
+
+    integer integer::operator+(const INT_TYPE &rhs) const noexcept
+    {
+        if (is_inf)
+            return *this;
+        return integer(val + rhs);
+    }
+    integer integer::operator-(const INT_TYPE &rhs) const noexcept
+    {
+        if (is_inf)
+            return *this;
+        return integer(val - rhs);
+    }
+    integer integer::operator*(const INT_TYPE &rhs) const noexcept
+    {
+        if (is_inf)
+            return *this;
+        return integer(val * rhs);
+    }
+    integer integer::operator/(const INT_TYPE &rhs) const noexcept
+    {
+        if (is_inf)
+            return *this;
+        return integer(val / rhs);
+    }
+
+    integer &integer::operator+=(const integer &rhs) noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return *this = is_inf ? *this : rhs;
+        val += rhs.val;
+        return *this;
+    }
+    integer &integer::operator-=(const integer &rhs) noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return *this = is_inf ? *this : rhs;
+        val -= rhs.val;
+        return *this;
+    }
+    integer &integer::operator*=(const integer &rhs) noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return *this = is_inf ? *this : rhs;
+        val *= rhs.val;
+        return *this;
+    }
+    integer &integer::operator/=(const integer &rhs) noexcept
+    {
+        if (is_inf || rhs.is_inf)
+            return *this = is_inf ? *this : rhs;
+        val /= rhs.val;
+        return *this;
+    }
+
+    integer &integer::operator+=(const INT_TYPE &rhs) noexcept
+    {
+        if (is_inf)
+            return *this;
+        val += rhs;
+        return *this;
+    }
+    integer &integer::operator-=(const INT_TYPE &rhs) noexcept
+    {
+        if (is_inf)
+            return *this;
+        val -= rhs;
+        return *this;
+    }
+    integer &integer::operator*=(const INT_TYPE &rhs) noexcept
+    {
+        if (is_inf)
+            return *this;
+        val *= rhs;
+        return *this;
+    }
+    integer &integer::operator/=(const INT_TYPE &rhs) noexcept
+    {
+        if (is_inf)
+            return *this;
+        val /= rhs;
+        return *this;
+    }
+
+    integer operator+(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs + lhs; }
+    integer operator-(const INT_TYPE &lhs, const integer &rhs) noexcept { return -rhs + lhs; }
+    integer operator*(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs * lhs; }
+    integer operator/(const INT_TYPE &lhs, const integer &rhs) noexcept { return integer(lhs) / rhs; }
+
+    bool operator!=(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs != lhs; }
+    bool operator<(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs > lhs; }
+    bool operator<=(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs >= lhs; }
+    bool operator==(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs == lhs; }
+    bool operator>=(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs <= lhs; }
+    bool operator>(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs < lhs; }
+
+    integer integer::operator-() const noexcept { return integer(-val); }
 } // namespace utils

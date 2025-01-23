@@ -44,6 +44,40 @@ namespace utils
     [[nodiscard]] bool operator>=(const INT_TYPE &rhs) const noexcept;
     [[nodiscard]] bool operator>(const INT_TYPE &rhs) const noexcept;
 
+    [[nodiscard]] integer operator+(const integer &rhs) const noexcept;
+    [[nodiscard]] integer operator-(const integer &rhs) const noexcept;
+    [[nodiscard]] integer operator*(const integer &rhs) const noexcept;
+    [[nodiscard]] integer operator/(const integer &rhs) const noexcept;
+
+    [[nodiscard]] integer operator+(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] integer operator-(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] integer operator*(const INT_TYPE &rhs) const noexcept;
+    [[nodiscard]] integer operator/(const INT_TYPE &rhs) const noexcept;
+
+    integer &operator+=(const integer &rhs) noexcept;
+    integer &operator-=(const integer &rhs) noexcept;
+    integer &operator*=(const integer &rhs) noexcept;
+    integer &operator/=(const integer &rhs) noexcept;
+
+    integer &operator+=(const INT_TYPE &rhs) noexcept;
+    integer &operator-=(const INT_TYPE &rhs) noexcept;
+    integer &operator*=(const INT_TYPE &rhs) noexcept;
+    integer &operator/=(const INT_TYPE &rhs) noexcept;
+
+    friend integer operator+(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend integer operator-(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend integer operator*(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend integer operator/(const INT_TYPE &lhs, const integer &rhs) noexcept;
+
+    friend bool operator!=(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend bool operator<(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend bool operator<=(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend bool operator==(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend bool operator>=(const INT_TYPE &lhs, const integer &rhs) noexcept;
+    friend bool operator>(const INT_TYPE &lhs, const integer &rhs) noexcept;
+
+    [[nodiscard]] integer operator-() const noexcept;
+
   private:
     INT_TYPE val;
     bool is_inf;
