@@ -17,13 +17,15 @@ namespace utils
   template <typename T>
   class u_ptr
   {
+    template <typename U>
+    friend class u_ptr; // Allows s_ptr<U> to access s_ptr<T>'s private members
   public:
     /**
      * @brief Constructs a unique pointer with the given raw pointer.
      *
      * @param ptr The raw pointer to manage.
      */
-    u_ptr(T *ptr) : ptr(ptr) {}
+    u_ptr(T *ptr = nullptr) : ptr(ptr) {}
     /**
      * @brief Deleted copy constructor to prevent copying.
      *
@@ -44,22 +46,44 @@ namespace utils
      */
     u_ptr(u_ptr &&other) : ptr(other.ptr) { other.ptr = nullptr; }
     /**
+     * @brief Move constructor to transfer ownership from another unique pointer.
+     *
+     * @tparam U The type of the object being managed by the other unique pointer.
+     * @param other The other unique pointer to move from.
+     */
+    template <typename U, typename = std::enable_if_t<std::is_base_of_v<T, U>>>
+    u_ptr(u_ptr<U> &&other) : ptr(other.ptr) { other.ptr = nullptr; }
+    /**
      * @brief Destructor that deletes the managed object.
      */
     ~u_ptr() { delete ptr; }
+
+    /**
+     * @brief Retrieves the raw pointer to the managed object.
+     *
+     * @return T* Pointer to the managed object.
+     */
+    T *get() const { return ptr; }
 
     /**
      * @brief Overloaded arrow operator to access the managed object.
      *
      * @return T* Pointer to the managed object.
      */
-    T *operator->() { return ptr; }
+    T *operator->() const { return ptr; }
     /**
      * @brief Overloaded dereference operator to access the managed object.
      *
      * @return T& Reference to the managed object.
      */
-    T &operator*() { return *ptr; }
+    T &operator*() const { return *ptr; }
+
+    /**
+     * @brief Conversion operator to check if the unique pointer is valid.
+     *
+     * @return bool True if the unique pointer is valid, false otherwise.
+     */
+    operator bool() const { return ptr != nullptr; }
 
     /**
      * @brief Move assignment operator to transfer ownership from another unique pointer.
@@ -108,6 +132,9 @@ namespace utils
   template <typename T>
   class s_ptr
   {
+    template <typename U>
+    friend class s_ptr; // Allows s_ptr<U> to access s_ptr<T>'s private members
+
   public:
     /**
      * @brief Constructs a shared pointer with the given raw pointer.
@@ -130,28 +157,6 @@ namespace utils
         ++(*ref_count);
     }
     /**
-     * @brief Copy assignment operator to share ownership with another shared pointer.
-     *
-     * @param other The other shared pointer to copy from.
-     * @return s_ptr& Reference to this shared pointer.
-     */
-    s_ptr &operator=(const s_ptr &other)
-    {
-      if (this != &other)
-      {
-        if (ptr && --(*ref_count) == 0)
-        {
-          delete ptr;
-          delete ref_count;
-        }
-        ptr = other.ptr;
-        ref_count = other.ref_count;
-        if (ptr)
-          ++(*ref_count);
-      }
-      return *this;
-    }
-    /**
      * @brief Move constructor to transfer ownership from another shared pointer.
      *
      * @param other The other shared pointer to move from.
@@ -162,29 +167,42 @@ namespace utils
       other.ref_count = nullptr;
     }
     /**
+     * @brief Move constructor to transfer ownership from another shared pointer.
+     *
+     * @param other The other shared pointer to move from.
+     */
+    template <typename U, typename = std::enable_if_t<std::is_base_of_v<T, U>>>
+    s_ptr(s_ptr<U> &&other) : ptr(other.ptr), ref_count(other.ref_count)
+    {
+      other.ptr = nullptr;
+      other.ref_count = nullptr;
+    }
+    /**
      * @brief Destructor that deletes the managed object if no other shared pointers own it.
      */
     ~s_ptr()
     {
-      if (ptr && --(*ref_count) == 0)
-      {
-        delete ptr;
-        delete ref_count;
-      }
+      release();
     }
 
     /**
-     * @brief Overloaded arrow operator to access the managed object.
+     * @brief Copy assignment operator to share ownership with another shared pointer.
      *
-     * @return T* Pointer to the managed object.
+     * @param other The other shared pointer to copy from.
+     * @return s_ptr& Reference to this shared pointer.
      */
-    T *operator->() { return ptr; }
-    /**
-     * @brief Overloaded dereference operator to access the managed object.
-     *
-     * @return T& Reference to the managed object.
-     */
-    T &operator*() { return *ptr; }
+    s_ptr &operator=(const s_ptr &other)
+    {
+      if (this != &other)
+      {
+        release();
+        ptr = other.ptr;
+        ref_count = other.ref_count;
+        if (ptr)
+          ++(*ref_count);
+      }
+      return *this;
+    }
 
     /**
      * @brief Move assignment operator to transfer ownership from another shared pointer.
@@ -196,11 +214,7 @@ namespace utils
     {
       if (this != &other)
       {
-        if (ptr && --(*ref_count) == 0)
-        {
-          delete ptr;
-          delete ref_count;
-        }
+        release();
         ptr = other.ptr;
         ref_count = other.ref_count;
         other.ptr = nullptr;
@@ -210,11 +224,48 @@ namespace utils
     }
 
     /**
+     * @brief Retrieves the raw pointer to the managed object.
+     *
+     * @return T* Pointer to the managed object.
+     */
+    T *get() const { return ptr; }
+
+    /**
+     * @brief Overloaded arrow operator to access the managed object.
+     *
+     * @return T* Pointer to the managed object.
+     */
+    T *operator->() const { return ptr; }
+    /**
+     * @brief Overloaded dereference operator to access the managed object.
+     *
+     * @return T& Reference to the managed object.
+     */
+    T &operator*() const { return *ptr; }
+
+    /**
+     * @brief Conversion operator to check if the shared pointer is valid.
+     *
+     * @return bool True if the shared pointer is valid, false otherwise.
+     */
+    operator bool() const { return ptr != nullptr; }
+
+    /**
      * @brief Returns the number of shared pointers owning the managed object.
      *
      * @return size_t The number of shared pointers owning the managed object.
      */
     size_t use_count() { return *ref_count; }
+
+  private:
+    inline void release()
+    {
+      if (ptr && --(*ref_count) == 0)
+      {
+        delete ptr;
+        delete ref_count;
+      }
+    }
 
   private:
     T *ptr;
@@ -223,6 +274,12 @@ namespace utils
 
   template <typename Tp, typename... Args>
   s_ptr<Tp> make_s_ptr(Args &&...args) { return s_ptr<Tp>(new Tp(std::forward<Args>(args)...)); }
+
+  template <class To, class From>
+  s_ptr<To> static_pointer_cast(const s_ptr<From> &sp) { return s_ptr<To>(static_cast<To *>(sp.get())); }
+
+  template <class To, class From>
+  s_ptr<To> dynamic_pointer_cast(const s_ptr<From> &sp) { return s_ptr<To>(dynamic_cast<To *>(sp.get())); }
 
   /**
    * @class ref_wrapper
@@ -242,15 +299,15 @@ namespace utils
      *
      * @param ref The reference to wrap.
      */
-    ref_wrapper(T &ref) : ref(ref) {}
+    ref_wrapper(T &ref) : ref(&ref) {}
     /**
-     * @brief Copy constructor to copy the reference from another reference wrapper.
+     * @brief Copy constructor to share ownership with another reference wrapper.
      *
      * @param other The other reference wrapper to copy from.
      */
     ref_wrapper(const ref_wrapper &other) : ref(other.ref) {}
     /**
-     * @brief Copy assignment operator to copy the reference from another reference wrapper.
+     * @brief Copy assignment operator to share ownership with another reference wrapper.
      *
      * @param other The other reference wrapper to copy from.
      * @return ref_wrapper& Reference to this reference wrapper.
@@ -262,19 +319,19 @@ namespace utils
     }
 
     /**
-     * @brief Overloaded arrow operator to access the reference.
+     * @brief Retrieves the reference being wrapped.
      *
-     * @return T* Pointer to the reference.
+     * @return T& Reference being wrapped.
      */
-    T *operator->() { return &ref; }
+    T *operator->() const { return ref; }
     /**
-     * @brief Overloaded dereference operator to access the reference.
+     * @brief Retrieves the reference being wrapped.
      *
-     * @return T& Reference to the reference.
+     * @return T& Reference being wrapped.
      */
-    T &operator*() { return ref; }
+    T &operator*() const { return *ref; }
 
   private:
-    T &ref;
+    T *ref;
   };
 } // namespace utils
