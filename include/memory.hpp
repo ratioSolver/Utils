@@ -33,13 +33,6 @@ namespace utils
      */
     u_ptr(const u_ptr &other) = delete;
     /**
-     * @brief Deleted copy assignment operator to prevent copying.
-     *
-     * @param other The other unique pointer to copy from.
-     * @return u_ptr& Reference to this unique pointer.
-     */
-    u_ptr &operator=(const u_ptr &other) = delete;
-    /**
      * @brief Move constructor to transfer ownership from another unique pointer.
      *
      * @param other The other unique pointer to move from.
@@ -85,6 +78,13 @@ namespace utils
      */
     operator bool() const { return ptr != nullptr; }
 
+    /**
+     * @brief Deleted copy assignment operator to prevent copying.
+     *
+     * @param other The other unique pointer to copy from.
+     * @return u_ptr& Reference to this unique pointer.
+     */
+    u_ptr &operator=(const u_ptr &other) = delete;
     /**
      * @brief Move assignment operator to transfer ownership from another unique pointer.
      *
