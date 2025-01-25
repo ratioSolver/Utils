@@ -157,6 +157,18 @@ namespace utils
         ++(*ref_count);
     }
     /**
+     * @brief Copy constructor to share ownership with another shared pointer.
+     *
+     * @tparam U The type of the object being managed by the other shared pointer.
+     * @param other The other shared pointer to copy from.
+     */
+    template <typename U, typename = std::enable_if_t<std::is_base_of_v<U, T>>>
+    s_ptr(const s_ptr<U> &other) : ptr(static_cast<T *>(other.ptr)), ref_count(other.ref_count)
+    {
+      if (ptr)
+        ++(*ref_count);
+    }
+    /**
      * @brief Move constructor to transfer ownership from another shared pointer.
      *
      * @param other The other shared pointer to move from.
@@ -169,6 +181,7 @@ namespace utils
     /**
      * @brief Move constructor to transfer ownership from another shared pointer.
      *
+     * @tparam U The type of the object being managed by the other shared pointer.
      * @param other The other shared pointer to move from.
      */
     template <typename U, typename = std::enable_if_t<std::is_base_of_v<T, U>>>
@@ -180,10 +193,7 @@ namespace utils
     /**
      * @brief Destructor that deletes the managed object if no other shared pointers own it.
      */
-    ~s_ptr()
-    {
-      release();
-    }
+    ~s_ptr() { release(); }
 
     /**
      * @brief Copy assignment operator to share ownership with another shared pointer.
@@ -276,10 +286,7 @@ namespace utils
   s_ptr<Tp> make_s_ptr(Args &&...args) { return s_ptr<Tp>(new Tp(std::forward<Args>(args)...)); }
 
   template <class To, class From>
-  s_ptr<To> static_pointer_cast(const s_ptr<From> &sp) { return s_ptr<To>(static_cast<To *>(sp.get())); }
-
-  template <class To, class From>
-  s_ptr<To> dynamic_pointer_cast(const s_ptr<From> &sp) { return s_ptr<To>(dynamic_cast<To *>(sp.get())); }
+  s_ptr<To> s_ptr_cast(const s_ptr<From> &sp) { return s_ptr<To>(sp); }
 
   /**
    * @class ref_wrapper
