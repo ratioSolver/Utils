@@ -44,7 +44,7 @@ namespace utils
      * @tparam U The type of the object being managed by the other unique pointer.
      * @param other The other unique pointer to move from.
      */
-    template <typename U, typename = std::enable_if_t<std::is_base_of_v<T, U>>>
+    template <typename U>
     u_ptr(u_ptr<U> &&other) : ptr(other.ptr) { other.ptr = nullptr; }
     /**
      * @brief Destructor that deletes the managed object.
@@ -162,7 +162,7 @@ namespace utils
      * @tparam U The type of the object being managed by the other shared pointer.
      * @param other The other shared pointer to copy from.
      */
-    template <typename U, typename = std::enable_if_t<std::is_base_of_v<U, T>>>
+    template <typename U>
     s_ptr(const s_ptr<U> &other) : ptr(static_cast<T *>(other.ptr)), ref_count(other.ref_count)
     {
       if (ptr)
@@ -184,7 +184,7 @@ namespace utils
      * @tparam U The type of the object being managed by the other shared pointer.
      * @param other The other shared pointer to move from.
      */
-    template <typename U, typename = std::enable_if_t<std::is_base_of_v<T, U>>>
+    template <typename U>
     s_ptr(s_ptr<U> &&other) : ptr(other.ptr), ref_count(other.ref_count)
     {
       other.ptr = nullptr;
