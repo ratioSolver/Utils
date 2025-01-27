@@ -213,6 +213,26 @@ namespace utils
       }
       return *this;
     }
+    /**
+     * @brief Copy assignment operator to share ownership with another shared pointer.
+     *
+     * @tparam U The type of the object being managed by the other shared pointer.
+     * @param other The other shared pointer to copy from.
+     * @return s_ptr& Reference to this shared pointer.
+     */
+    template <typename U>
+    s_ptr &operator=(const s_ptr<U> &other)
+    {
+      if (this != &other)
+      {
+        release();
+        ptr = static_cast<T *>(other.ptr);
+        ref_count = other.ref_count;
+        if (ptr)
+          ++(*ref_count);
+      }
+      return *this;
+    }
 
     /**
      * @brief Move assignment operator to transfer ownership from another shared pointer.
@@ -221,6 +241,26 @@ namespace utils
      * @return s_ptr& Reference to this shared pointer.
      */
     s_ptr &operator=(s_ptr &&other)
+    {
+      if (this != &other)
+      {
+        release();
+        ptr = other.ptr;
+        ref_count = other.ref_count;
+        other.ptr = nullptr;
+        other.ref_count = nullptr;
+      }
+      return *this;
+    }
+    /**
+     * @brief Move assignment operator to transfer ownership from another shared pointer.
+     *
+     * @tparam U The type of the object being managed by the other shared pointer.
+     * @param other The other shared pointer to move from.
+     * @return s_ptr& Reference to this shared pointer.
+     */
+    template <typename U>
+    s_ptr &operator=(s_ptr<U> &&other)
     {
       if (this != &other)
       {
@@ -292,6 +332,36 @@ namespace utils
       return s_ptr<To>(sp);
     return s_ptr<To>();
   }
+
+  /**
+   * @brief Equality comparison operator for smart pointers.
+   *
+   * This operator compares two smart pointers of potentially different types
+   * to determine if they point to the same object.
+   *
+   * @tparam T The type of the object managed by the first smart pointer.
+   * @tparam U The type of the object managed by the second smart pointer.
+   * @param a The first smart pointer to compare.
+   * @param b The second smart pointer to compare.
+   * @return true if both smart pointers point to the same object, false otherwise.
+   */
+  template <class T, class U>
+  inline bool operator==(s_ptr<T> const &a, s_ptr<U> const &b) { return a.get() == b.get(); }
+
+  /**
+   * @brief Inequality comparison operator for smart pointers.
+   *
+   * This operator compares two smart pointers of potentially different types
+   * to determine if they point to different objects.
+   *
+   * @tparam T The type of the object managed by the first smart pointer.
+   * @tparam U The type of the object managed by the second smart pointer.
+   * @param a The first smart pointer to compare.
+   * @param b The second smart pointer to compare.
+   * @return true if both smart pointers point to different objects, false otherwise.
+   */
+  template <class T, class U>
+  inline bool operator!=(s_ptr<T> const &a, s_ptr<U> const &b) { return a.get() != b.get(); }
 
   /**
    * @class ref_wrapper
