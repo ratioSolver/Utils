@@ -326,6 +326,16 @@ namespace utils
     }
 
     /**
+     * @brief Equality operator for ref_wrapper.
+     *
+     * This operator compares the current ref_wrapper object with another ref_wrapper object.
+     *
+     * @param other The ref_wrapper object to compare with.
+     * @return true if both ref_wrapper objects are equal, false otherwise.
+     */
+    bool operator==(const ref_wrapper &other) const { return ref == other.ref; }
+
+    /**
      * @brief Retrieves the reference being wrapped.
      *
      * @return T& Reference being wrapped.
