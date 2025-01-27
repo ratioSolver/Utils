@@ -286,7 +286,12 @@ namespace utils
   s_ptr<Tp> make_s_ptr(Args &&...args) { return s_ptr<Tp>(new Tp(std::forward<Args>(args)...)); }
 
   template <class To, class From>
-  s_ptr<To> s_ptr_cast(const s_ptr<From> &sp) { return s_ptr<To>(sp); }
+  s_ptr<To> s_ptr_cast(const s_ptr<From> &sp)
+  {
+    if (auto p = dynamic_cast<To *>(sp.get()))
+      return s_ptr<To>(sp);
+    return s_ptr<To>();
+  }
 
   /**
    * @class ref_wrapper
