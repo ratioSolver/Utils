@@ -153,4 +153,11 @@ namespace utils
     bool operator>(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs < lhs; }
 
     integer integer::operator-() const noexcept { return integer(-val); }
+
+    std::string to_string(const integer &rhs) noexcept
+    {
+        if (rhs.is_inf)
+            return rhs.val > 0 ? "inf" : "-inf";
+        return std::to_string(rhs.val);
+    }
 } // namespace utils

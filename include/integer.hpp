@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include <limits>
 
 namespace utils
@@ -14,6 +15,8 @@ namespace utils
 
     explicit integer(INT_TYPE val);
     explicit integer(INT_TYPE val, bool is_inf);
+
+    [[nodiscard]] INT_TYPE value() const noexcept { return val; }
 
     [[nodiscard]] inline friend bool is_zero(const integer &rhs) noexcept { return !is_infinite(rhs) && rhs.val == 0; }
     [[nodiscard]] inline friend bool is_positive(const integer &rhs) noexcept { return rhs.val > 0; }
@@ -77,6 +80,8 @@ namespace utils
     friend bool operator>(const INT_TYPE &lhs, const integer &rhs) noexcept;
 
     [[nodiscard]] integer operator-() const noexcept;
+
+    friend std::string to_string(const integer &rhs) noexcept;
 
   private:
     INT_TYPE val;
