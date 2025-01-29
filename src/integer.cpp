@@ -34,24 +34,32 @@ namespace utils
 
     integer integer::operator+(const integer &rhs) const noexcept
     {
+        assert(!is_positive_infinite(*this) || !is_negative_infinite(rhs)); // indeterminant form +inf + -inf
+        assert(!is_negative_infinite(*this) || !is_positive_infinite(rhs)); // indeterminant form -inf + +inf
         if (is_inf || rhs.is_inf)
             return is_inf ? *this : rhs;
         return integer(val + rhs.val);
     }
     integer integer::operator-(const integer &rhs) const noexcept
     {
+        assert(!is_positive_infinite(*this) || !is_positive_infinite(rhs)); // indeterminant form +inf - +inf
+        assert(!is_negative_infinite(*this) || !is_negative_infinite(rhs)); // indeterminant form -inf - -inf
         if (is_inf || rhs.is_inf)
             return is_inf ? *this : rhs;
         return integer(val - rhs.val);
     }
     integer integer::operator*(const integer &rhs) const noexcept
     {
+        assert(!is_infinite(*this) || !is_zero(rhs)); // indeterminant form inf * 0
+        assert(!is_zero(*this) || !is_infinite(rhs)); // indeterminant form 0 * inf
         if (is_inf || rhs.is_inf)
             return is_inf ? *this : rhs;
         return integer(val * rhs.val);
     }
     integer integer::operator/(const integer &rhs) const noexcept
     {
+        assert(!is_infinite(*this) || !is_infinite(rhs)); // indeterminant form inf / inf
+        assert(!is_zero(*this) || !is_zero(rhs));         // indeterminant form 0 / 0
         if (is_inf || rhs.is_inf)
             return is_inf ? *this : rhs;
         return integer(val / rhs.val);
@@ -71,19 +79,25 @@ namespace utils
     }
     integer integer::operator*(const INT_TYPE &rhs) const noexcept
     {
+        assert(!is_infinite(*this) || rhs != 0); // indeterminant form inf * 0
         if (is_inf)
             return *this;
         return integer(val * rhs);
     }
     integer integer::operator/(const INT_TYPE &rhs) const noexcept
     {
+        assert(!is_zero(*this) || rhs != 0); // indeterminant form 0 / 0
         if (is_inf)
             return *this;
+        if (rhs == 0)
+            return is_inf ? *this : integer(val > 0 ? 1 : -1, true);
         return integer(val / rhs);
     }
 
     integer &integer::operator+=(const integer &rhs) noexcept
     {
+        assert(!is_positive_infinite(*this) || !is_negative_infinite(rhs)); // indeterminant form +inf + -inf
+        assert(!is_negative_infinite(*this) || !is_positive_infinite(rhs)); // indeterminant form -inf + +inf
         if (is_inf || rhs.is_inf)
             return *this = is_inf ? *this : rhs;
         val += rhs.val;
@@ -91,6 +105,8 @@ namespace utils
     }
     integer &integer::operator-=(const integer &rhs) noexcept
     {
+        assert(!is_positive_infinite(*this) || !is_positive_infinite(rhs)); // indeterminant form +inf - +inf
+        assert(!is_negative_infinite(*this) || !is_negative_infinite(rhs)); // indeterminant form -inf - -inf
         if (is_inf || rhs.is_inf)
             return *this = is_inf ? *this : rhs;
         val -= rhs.val;
@@ -98,6 +114,8 @@ namespace utils
     }
     integer &integer::operator*=(const integer &rhs) noexcept
     {
+        assert(!is_infinite(*this) || !is_zero(rhs)); // indeterminant form inf * 0
+        assert(!is_zero(*this) || !is_infinite(rhs)); // indeterminant form 0 * inf
         if (is_inf || rhs.is_inf)
             return *this = is_inf ? *this : rhs;
         val *= rhs.val;
@@ -105,9 +123,17 @@ namespace utils
     }
     integer &integer::operator/=(const integer &rhs) noexcept
     {
+        assert(!is_infinite(*this) || !is_infinite(rhs)); // indeterminant form inf / inf
+        assert(!is_zero(*this) || !is_zero(rhs));         // indeterminant form 0 / 0
         if (is_inf || rhs.is_inf)
             return *this = is_inf ? *this : rhs;
-        val /= rhs.val;
+        if (rhs.val == 0)
+        {
+            is_inf = true;
+            val = val > 0 ? 1 : -1;
+        }
+        else
+            val /= rhs.val;
         return *this;
     }
 
@@ -134,9 +160,16 @@ namespace utils
     }
     integer &integer::operator/=(const INT_TYPE &rhs) noexcept
     {
+        assert(!is_zero(*this) || rhs != 0); // indeterminant form 0 / 0
         if (is_inf)
             return *this;
-        val /= rhs;
+        if (rhs == 0)
+        {
+            is_inf = true;
+            val = val > 0 ? 1 : -1;
+        }
+        else
+            val /= rhs;
         return *this;
     }
 
@@ -152,7 +185,7 @@ namespace utils
     bool operator>=(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs <= lhs; }
     bool operator>(const INT_TYPE &lhs, const integer &rhs) noexcept { return rhs < lhs; }
 
-    integer integer::operator-() const noexcept { return integer(-val); }
+    integer integer::operator-() const noexcept { return integer(-val, is_inf); }
 
     std::string to_string(const integer &rhs) noexcept
     {
