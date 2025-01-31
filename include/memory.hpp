@@ -141,11 +141,7 @@ namespace utils
      *
      * @param ptr The raw pointer to manage.
      */
-    s_ptr(T *ptr = nullptr) : ptr(ptr), ref_count(new size_t(0))
-    {
-      if (ptr)
-        *ref_count = 1;
-    }
+    s_ptr(T *ptr = nullptr) : ptr(ptr), ref_count(ptr ? new size_t(1) : nullptr) {}
     /**
      * @brief Copy constructor to share ownership with another shared pointer.
      *
@@ -153,7 +149,7 @@ namespace utils
      */
     s_ptr(const s_ptr &other) : ptr(other.ptr), ref_count(other.ref_count)
     {
-      if (ptr)
+      if (ref_count)
         ++(*ref_count);
     }
     /**
@@ -165,7 +161,7 @@ namespace utils
     template <typename U>
     s_ptr(const s_ptr<U> &other) : ptr(static_cast<T *>(other.ptr)), ref_count(other.ref_count)
     {
-      if (ptr)
+      if (ref_count)
         ++(*ref_count);
     }
     /**
@@ -208,7 +204,7 @@ namespace utils
         release();
         ptr = other.ptr;
         ref_count = other.ref_count;
-        if (ptr)
+        if (ref_count)
           ++(*ref_count);
       }
       return *this;
@@ -228,7 +224,7 @@ namespace utils
         release();
         ptr = static_cast<T *>(other.ptr);
         ref_count = other.ref_count;
-        if (ptr)
+        if (ref_count)
           ++(*ref_count);
       }
       return *this;
@@ -305,12 +301,12 @@ namespace utils
      *
      * @return size_t The number of shared pointers owning the managed object.
      */
-    size_t use_count() { return *ref_count; }
+    size_t use_count() { return ref_count ? *ref_count : 0; }
 
   private:
     inline void release()
     {
-      if (ptr && --(*ref_count) == 0)
+      if (ref_count && --(*ref_count) == 0)
       {
         delete ptr;
         delete ref_count;
