@@ -8,8 +8,9 @@ namespace utils
     const integer integer::negative_infinite(-1, true);
     const integer integer::positive_infinite(1, true);
 
-    integer::integer(INT_TYPE val) : val(val), is_inf(false) {}
-    integer::integer(INT_TYPE val, bool is_inf) : val(val), is_inf(is_inf)
+    integer::integer() noexcept : val(0), is_inf(false) {}
+    integer::integer(INT_TYPE val) noexcept : val(val), is_inf(false) {}
+    integer::integer(INT_TYPE val, bool is_inf) noexcept : val(val), is_inf(is_inf)
     {
         if (is_inf)
         {
