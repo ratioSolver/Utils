@@ -1,5 +1,6 @@
 #include "rational.hpp"
 #include <numeric>
+#include <cmath>
 #include <cassert>
 
 namespace utils
@@ -305,23 +306,43 @@ namespace utils
         return operator*=(rec);
     }
 
-    [[nodiscard]] rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
-    [[nodiscard]] rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
-    [[nodiscard]] rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
-    [[nodiscard]] rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
+    rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
+    rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
+    rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
+    rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
 
-    [[nodiscard]] bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
-    [[nodiscard]] bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
-    [[nodiscard]] bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
-    [[nodiscard]] bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
-    [[nodiscard]] bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
-    [[nodiscard]] bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
+    bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
+    bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
+    bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
+    bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
+    bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
+    bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
 
     rational rational::operator-() const noexcept
     {
         rational res(*this);
         res.num = -res.num;
         return res;
+    }
+
+    INT_TYPE floor(const rational &rhs) noexcept
+    {
+        if (rhs.den == 1)
+            return rhs.num;
+        else if (rhs.num >= 0)
+            return rhs.num / rhs.den;
+        else
+            return rhs.num / rhs.den - 1;
+    }
+
+    INT_TYPE ceil(const rational &rhs) noexcept
+    {
+        if (rhs.den == 1)
+            return rhs.num;
+        else if (rhs.num >= 0)
+            return rhs.num / rhs.den + 1;
+        else
+            return rhs.num / rhs.den;
     }
 
     void rational::normalize() noexcept

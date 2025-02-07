@@ -120,6 +120,29 @@ void test_rationals_1()
     assert(r2.denominator() == 1);
 }
 
+void test_rationals_2()
+{
+    utils::rational r0(7, 3);
+    assert(floor(r0) == 2);
+    assert(ceil(r0) == 3);
+
+    utils::rational r1(10, 4);
+    assert(floor(r1) == 2);
+    assert(ceil(r1) == 3);
+
+    utils::rational r2(10, 3);
+    assert(floor(r2) == 3);
+    assert(ceil(r2) == 4);
+
+    utils::rational r3(6, 2);
+    assert(floor(r3) == 3);
+    assert(ceil(r3) == 3);
+
+    utils::rational r4(-7, 3);
+    assert(floor(r4) == -3);
+    assert(ceil(r4) == -2);
+}
+
 void test_inf_rationals()
 {
     assert(utils::rational::negative_infinite < utils::rational::positive_infinite);
@@ -271,6 +294,7 @@ int main()
 
     test_rationals();
     test_rationals_1();
+    test_rationals_2();
 
     test_inf_rationals();
 

@@ -64,19 +64,38 @@ namespace utils
     rational &operator*=(const INT_TYPE &rhs) noexcept;
     rational &operator/=(const INT_TYPE &rhs) noexcept;
 
-    friend rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
-    friend bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    friend bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    [[nodiscard]] friend bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
     [[nodiscard]] rational operator-() const noexcept;
+
+    /**
+     * @brief Computes the floor value of the given rational number.
+     *
+     * This function returns the largest integer value that is less than or equal to the given rational number.
+     *
+     * @param rhs The rational number for which the floor value is to be computed.
+     * @return INT_TYPE The floor value of the given rational number.
+     */
+    [[nodiscard]] friend INT_TYPE floor(const rational &rhs) noexcept;
+    /**
+     * @brief Computes the ceiling value of the given rational number.
+     *
+     * This function returns the smallest integer value that is greater than or equal to the given rational number.
+     *
+     * @param rhs The rational number for which the ceiling value is to be computed.
+     * @return INT_TYPE The ceiling value of the given rational number.
+     */
+    [[nodiscard]] friend INT_TYPE ceil(const rational &rhs) noexcept;
 
   private:
     void normalize() noexcept;
