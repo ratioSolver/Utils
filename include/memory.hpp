@@ -102,6 +102,23 @@ namespace utils
       return *this;
     }
 
+    /**
+     * @brief Swaps the contents of this unique pointer with another.
+     *
+     * This function exchanges the managed object pointers between this unique pointer
+     * and the provided unique pointer `other`. Both pointers must be of the same type.
+     *
+     * @param other The unique pointer to swap with.
+     *
+     * @note This function is marked as noexcept, indicating that it does not throw exceptions.
+     */
+    void swap(u_ptr &other) noexcept
+    {
+      T *tmp = ptr;
+      ptr = other.ptr;
+      other.ptr = tmp;
+    }
+
   private:
     T *ptr;
   };
