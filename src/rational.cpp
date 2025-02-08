@@ -325,7 +325,7 @@ namespace utils
         return res;
     }
 
-    INT_TYPE floor(const rational &rhs) noexcept
+    [[nodiscard]] INT_TYPE floor(const rational &rhs) noexcept
     {
         if (rhs.den == 1)
             return rhs.num;
@@ -335,7 +335,7 @@ namespace utils
             return rhs.num / rhs.den - 1;
     }
 
-    INT_TYPE ceil(const rational &rhs) noexcept
+    [[nodiscard]] INT_TYPE ceil(const rational &rhs) noexcept
     {
         if (rhs.den == 1)
             return rhs.num;

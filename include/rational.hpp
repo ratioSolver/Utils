@@ -86,7 +86,7 @@ namespace utils
      * @param rhs The rational number for which the floor value is to be computed.
      * @return INT_TYPE The floor value of the given rational number.
      */
-    [[nodiscard]] friend INT_TYPE floor(const rational &rhs) noexcept;
+    friend INT_TYPE floor(const rational &rhs) noexcept;
     /**
      * @brief Computes the ceiling value of the given rational number.
      *
@@ -95,7 +95,7 @@ namespace utils
      * @param rhs The rational number for which the ceiling value is to be computed.
      * @return INT_TYPE The ceiling value of the given rational number.
      */
-    [[nodiscard]] friend INT_TYPE ceil(const rational &rhs) noexcept;
+    friend INT_TYPE ceil(const rational &rhs) noexcept;
 
   private:
     void normalize() noexcept;
