@@ -64,17 +64,17 @@ namespace utils
     rational &operator*=(const INT_TYPE &rhs) noexcept;
     rational &operator/=(const INT_TYPE &rhs) noexcept;
 
-    [[nodiscard]] friend rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
-    [[nodiscard]] friend bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept;
-    [[nodiscard]] friend bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept;
+    friend bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept;
 
     [[nodiscard]] rational operator-() const noexcept;
 

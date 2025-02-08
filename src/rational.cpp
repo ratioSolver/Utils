@@ -306,17 +306,17 @@ namespace utils
         return operator*=(rec);
     }
 
-    rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
-    rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
-    rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
-    rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
+    [[nodiscard]] rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
+    [[nodiscard]] rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
+    [[nodiscard]] rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
+    [[nodiscard]] rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
 
-    bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
-    bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
-    bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
-    bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
-    bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
-    bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
+    [[nodiscard]] bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
+    [[nodiscard]] bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
+    [[nodiscard]] bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
+    [[nodiscard]] bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
+    [[nodiscard]] bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
+    [[nodiscard]] bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
 
     rational rational::operator-() const noexcept
     {
