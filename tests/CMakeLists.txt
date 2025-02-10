@@ -13,6 +13,12 @@ add_dependencies(pointers_tests utils)
 target_link_libraries(pointers_tests PRIVATE utils)
 setup_sanitizers(pointers_tests)
 
+add_executable(floyd_warshall_tests test_floyd_warshall.cpp)
+add_dependencies(floyd_warshall_tests utils)
+target_link_libraries(floyd_warshall_tests PRIVATE utils)
+setup_sanitizers(floyd_warshall_tests)
+
 add_test(NAME UTILS_LibTest COMMAND utils_lib_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 add_test(NAME CryptoTest COMMAND crypto_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 add_test(NAME PointersTest COMMAND pointers_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
+add_test(NAME FloydWarshallTest COMMAND floyd_warshall_tests WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
