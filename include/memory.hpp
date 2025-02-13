@@ -93,7 +93,7 @@ namespace utils
      */
     u_ptr &operator=(u_ptr &&other)
     {
-      if (this != &other)
+      if (ptr != other.ptr)
       {
         delete ptr;
         ptr = other.ptr;
@@ -216,7 +216,7 @@ namespace utils
      */
     s_ptr &operator=(const s_ptr &other)
     {
-      if (this != &other)
+      if (ptr != other.ptr)
       {
         release();
         ptr = other.ptr;
@@ -236,7 +236,7 @@ namespace utils
     template <typename U>
     s_ptr &operator=(const s_ptr<U> &other)
     {
-      if (this != &other)
+      if (ptr != other.ptr)
       {
         release();
         ptr = static_cast<T *>(other.ptr);
@@ -255,7 +255,7 @@ namespace utils
      */
     s_ptr &operator=(s_ptr &&other)
     {
-      if (this != &other)
+      if (ptr != other.ptr)
       {
         release();
         ptr = other.ptr;
@@ -275,7 +275,7 @@ namespace utils
     template <typename U>
     s_ptr &operator=(s_ptr<U> &&other)
     {
-      if (this != &other)
+      if (ptr != other.ptr)
       {
         release();
         ptr = other.ptr;
