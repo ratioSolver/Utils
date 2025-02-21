@@ -37,7 +37,7 @@ namespace utils
      *
      * @param other The other unique pointer to move from.
      */
-    u_ptr(u_ptr &&other) : ptr(other.ptr) { other.ptr = nullptr; }
+    u_ptr(u_ptr &&other) noexcept : ptr(other.ptr) { other.ptr = nullptr; }
     /**
      * @brief Move constructor to transfer ownership from another unique pointer.
      *
@@ -186,7 +186,7 @@ namespace utils
      *
      * @param other The other shared pointer to move from.
      */
-    s_ptr(s_ptr &&other) : ptr(other.ptr), ref_count(other.ref_count)
+    s_ptr(s_ptr &&other) noexcept : ptr(other.ptr), ref_count(other.ref_count)
     {
       other.ptr = nullptr;
       other.ref_count = nullptr;
