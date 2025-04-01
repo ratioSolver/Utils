@@ -176,7 +176,7 @@ namespace utils
      * @param other The other shared pointer to copy from.
      */
     template <typename U>
-    s_ptr(const s_ptr<U> &other) : ptr(dynamic_cast<T *>(other.ptr)), ref_count(other.ref_count)
+    s_ptr(const s_ptr<U> &other) : ptr(static_cast<T *>(other.ptr)), ref_count(other.ref_count)
     {
       if (ref_count)
         ++(*ref_count);
