@@ -23,6 +23,8 @@ if(${LOGGING_LEVEL_INDEX} EQUAL -1)
     message(FATAL_ERROR "Invalid logging level: ${LOGGING_LEVEL}")
 endif()
 
+option(BUILD_CRYPTO "Build crypto" OFF)
+
 if(LOGGING_LEVEL STREQUAL "TRACE")
     set(LOG_LEVEL 6)
 elseif(LOGGING_LEVEL STREQUAL "DEBUG")
@@ -45,6 +47,14 @@ target_compile_features(utils PUBLIC cxx_std_17)
 target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
 setup_sanitizers(utils)
+
+message(STATUS "Build crypto: ${BUILD_CRYPTO}")
+if(BUILD_CRYPTO)
+    find_package(OpenSSL REQUIRED)
+
+    target_sources(utils PRIVATE src/crypto.cpp)
+    target_link_libraries(utils PUBLIC OpenSSL::Crypto)
+endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)

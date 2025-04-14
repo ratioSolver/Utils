@@ -6,6 +6,10 @@ jobs:
   ubuntu-address-undefined-coverage:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -17,7 +21,7 @@ jobs:
           sudo apt-get install -y cmake lcov
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBSAN=ON -DENABLE_COV=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBSAN=ON -DENABLE_COV=ON -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Debug
@@ -40,6 +44,10 @@ jobs:
   ubuntu-memcheck:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -51,7 +59,7 @@ jobs:
           sudo apt-get install -y cmake valgrind
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Debug
@@ -63,6 +71,10 @@ jobs:
   windows-debug:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -73,7 +85,7 @@ jobs:
           choco install cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Debug
@@ -85,6 +97,10 @@ jobs:
   macos-address-undefined:
     runs-on: macos-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -95,7 +111,7 @@ jobs:
           brew install cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBSAN=ON
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Debug -DENABLE_ASAN=ON -DENABLE_UBSAN=ON -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Debug
@@ -106,6 +122,10 @@ jobs:
 
   ubuntu-release:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
 
     steps:
       - uses: actions/checkout@v4
@@ -118,7 +138,7 @@ jobs:
           sudo apt-get install -y cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Release
@@ -130,6 +150,10 @@ jobs:
   windows-release:
     runs-on: windows-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -140,7 +164,7 @@ jobs:
           choco install cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Release
@@ -152,6 +176,10 @@ jobs:
   macos-release:
     runs-on: macos-latest
 
+    strategy:
+      matrix:
+        BUILD_CRYPTO: [ON, OFF]
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -162,7 +190,7 @@ jobs:
           brew install cmake
 
       - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_CRYPTO=${{matrix.BUILD_CRYPTO}}
 
       - name: Build
         run: cmake --build build --config Release
