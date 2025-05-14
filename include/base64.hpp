@@ -6,7 +6,7 @@ namespace utils
 {
     static std::string const base64_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
-    inline std::string base64_encode(unsigned char const *input, size_t len)
+    [[nodiscard]] inline std::string base64_encode(unsigned char const *input, size_t len)
     {
         std::string ret;
         int i = 0;
