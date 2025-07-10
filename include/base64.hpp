@@ -53,4 +53,24 @@ namespace utils
 
         return ret;
     }
+
+    [[nodiscard]] inline std::string base64url_encode(const unsigned char *input, size_t len)
+    {
+        std::string base64 = base64_encode(input, len);
+
+        // Step 1: Replace '+' with '-', '/' with '_'
+        for (auto &c : base64)
+            if (c == '+')
+                c = '-';
+            else if (c == '/')
+                c = '_';
+
+        // Step 2: Remove trailing '=' chars (padding)
+        while (!base64.empty() && base64.back() == '=')
+            base64.pop_back();
+
+        return base64;
+    }
+
+    [[nodiscard]] inline std::string base64url_encode(const std::string &input) { return base64url_encode(reinterpret_cast<const unsigned char *>(input.data()), input.size()); }
 } // namespace utils
