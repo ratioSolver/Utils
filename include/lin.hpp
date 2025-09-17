@@ -69,4 +69,6 @@ namespace utils
     std::map<const var, rational> vars;
     rational known_term;
   };
+
+  [[nodiscard]] std::string to_string(const lin &rhs) noexcept;
 } // namespace utils

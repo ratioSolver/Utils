@@ -106,4 +106,6 @@ namespace utils
     INT_TYPE num; // the numerator..
     INT_TYPE den; // the denominator..
   };
+
+  [[nodiscard]] std::string to_string(const rational &rhs) noexcept;
 } // namespace utils

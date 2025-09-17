@@ -135,37 +135,12 @@ namespace utils
     [[nodiscard]] inline friend inf_rational operator*(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs * rhs.rat, lhs * rhs.inf); }
     [[nodiscard]] inline friend inf_rational operator/(const INT_TYPE &lhs, const inf_rational &rhs) noexcept { return inf_rational(lhs / rhs.rat, lhs / rhs.inf); }
 
-    friend std::string to_string(const inf_rational &rhs) noexcept
-    {
-      if (is_infinite(rhs.rat) || rhs.inf == rational::zero)
-        return to_string(rhs.rat);
-      std::string c_str;
-      if (rhs.rat != rational::zero)
-        c_str += to_string(rhs.rat);
-      if (rhs.inf == rational::one)
-        if (c_str.empty())
-          c_str += "ε";
-        else
-          c_str += " + ε";
-      else if (rhs.inf == -rational::one)
-        if (c_str.empty())
-          c_str += "-ε";
-        else
-          c_str += " - ε";
-      else if (is_negative(rhs.inf))
-        if (c_str.empty())
-          c_str += to_string(rhs.inf) + "ε";
-        else
-          c_str += " " + to_string(rhs.inf) + "ε";
-      else if (c_str.empty())
-        c_str += to_string(rhs.inf) + "ε";
-      else
-        c_str += " +" + to_string(rhs.inf) + "ε";
-      return c_str;
-    };
+    friend std::string to_string(const inf_rational &rhs) noexcept;
 
   private:
     rational rat; // the rational part..
     rational inf; // the infinitesimal part..
   };
+
+  [[nodiscard]] std::string to_string(const inf_rational &rhs) noexcept;
 } // namespace utils
