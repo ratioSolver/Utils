@@ -90,4 +90,6 @@ namespace utils
   };
 
   [[nodiscard]] constexpr INT_TYPE inf() noexcept { return std::numeric_limits<INT_TYPE>::max() / 2 - 1; }
+
+  [[nodiscard]] std::string to_string(const integer &rhs) noexcept;
 } // namespace utils
