@@ -82,12 +82,12 @@ void test_rationals_1()
     utils::rational r0;
     assert(r0.numerator() == 0);
     assert(r0.denominator() == 1);
-    assert(r0 == utils::rational::zero);
+    assert(r0 == 0);
 
     r0 += 1;
     assert(r0.numerator() == 1);
     assert(r0.denominator() == 1);
-    assert(r0 == utils::rational::one);
+    assert(r0 == 1);
 
     r0 += utils::rational(1, 2);
     assert(r0.numerator() == 3);
@@ -105,7 +105,7 @@ void test_rationals_1()
     utils::rational r2 = r1 / r0;
     assert(r2.numerator() == 0);
     assert(r2.denominator() == 1);
-    assert(r2 == utils::rational::zero);
+    assert(r2 == 0);
 
     r2 += 2;
     assert(r2.numerator() == 2);
@@ -150,9 +150,9 @@ void test_inf_rationals()
     assert(utils::rational::positive_infinite >= utils::rational::negative_infinite);
     assert(utils::rational::positive_infinite > utils::rational::negative_infinite);
 
-    utils::inf_rational eps(utils::rational::zero, utils::rational::one);
+    utils::inf_rational eps(0, utils::rational::one);
     assert(!(eps <= 0));
-    assert(eps <= utils::inf_rational(utils::rational::zero, utils::rational::one));
+    assert(eps <= utils::inf_rational(0, utils::rational::one));
     assert(eps > 0);
 }
 
@@ -160,7 +160,7 @@ void test_lin()
 {
     utils::lin l1;
     assert(l1.vars.empty());
-    assert(l1.known_term == utils::rational::zero);
+    assert(l1.known_term == 0);
 
     utils::lin l2(utils::rational(1, 2));
     assert(l2.vars.empty());
@@ -169,7 +169,7 @@ void test_lin()
     utils::lin l3(1, utils::rational(1, 2));
     assert(l3.vars.size() == 1);
     assert(l3.vars[1] == utils::rational(1, 2));
-    assert(l3.known_term == utils::rational::zero);
+    assert(l3.known_term == 0);
 
     utils::lin l4(1, utils::rational(1, 2));
     utils::lin l5(2, utils::rational(1, 3));
@@ -177,7 +177,7 @@ void test_lin()
     assert(l6.vars.size() == 2);
     assert(l6.vars[1] == utils::rational(1, 2));
     assert(l6.vars[2] == utils::rational(1, 3));
-    assert(l6.known_term == utils::rational::zero);
+    assert(l6.known_term == 0);
 
     utils::lin l7(1, utils::rational(1, 2));
     utils::lin l8(2, utils::rational(1, 3));
@@ -185,31 +185,31 @@ void test_lin()
     assert(l9.vars.size() == 2);
     assert(l9.vars[1] == utils::rational(1, 2));
     assert(l9.vars[2] == utils::rational(-1, 3));
-    assert(l9.known_term == utils::rational::zero);
+    assert(l9.known_term == 0);
 
     utils::lin l10(1, utils::rational(1, 2));
     utils::lin l12 = l10 * utils::rational(1, 3);
     assert(l12.vars.size() == 1);
     assert(l12.vars[1] == utils::rational(1, 6));
-    assert(l12.known_term == utils::rational::zero);
+    assert(l12.known_term == 0);
 
     utils::lin l13(1, utils::rational(1, 2));
     utils::lin l14 = utils::rational(1, 3) * l13;
     assert(l14.vars.size() == 1);
     assert(l14.vars[1] == utils::rational(1, 6));
-    assert(l14.known_term == utils::rational::zero);
+    assert(l14.known_term == 0);
 
     utils::lin l15(1, utils::rational(1, 2));
     utils::lin l16 = l15 / utils::rational(1, 3);
     assert(l16.vars.size() == 1);
     assert(l16.vars[1] == utils::rational(3, 2));
-    assert(l16.known_term == utils::rational::zero);
+    assert(l16.known_term == 0);
 
     utils::lin l17(1, utils::rational(1, 2));
     utils::lin l18 = l17 / utils::rational(1, 2);
     assert(l18.vars.size() == 1);
     assert(l18.vars[1] == utils::rational(1, 1));
-    assert(l18.known_term == utils::rational::zero);
+    assert(l18.known_term == 0);
 
     utils::lin l19(1, utils::rational(1, 2));
     utils::lin l20(2, utils::rational(1, 3));
@@ -217,7 +217,7 @@ void test_lin()
     assert(l19.vars.size() == 2);
     assert(l19.vars[1] == utils::rational(1, 2));
     assert(l19.vars[2] == utils::rational(1, 3));
-    assert(l19.known_term == utils::rational::zero);
+    assert(l19.known_term == 0);
 
     utils::lin l21(1, utils::rational(1, 2));
     utils::lin l22(2, utils::rational(1, 3));
@@ -225,25 +225,25 @@ void test_lin()
     assert(l21.vars.size() == 2);
     assert(l21.vars[1] == utils::rational(1, 2));
     assert(l21.vars[2] == utils::rational(-1, 3));
-    assert(l21.known_term == utils::rational::zero);
+    assert(l21.known_term == 0);
 
     utils::lin l23(1, utils::rational(1, 2));
     l23 *= utils::rational(1, 3);
     assert(l23.vars.size() == 1);
     assert(l23.vars[1] == utils::rational(1, 6));
-    assert(l23.known_term == utils::rational::zero);
+    assert(l23.known_term == 0);
 
     utils::lin l24(1, utils::rational(1, 2));
     l24 /= utils::rational(1, 3);
     assert(l24.vars.size() == 1);
     assert(l24.vars[1] == utils::rational(3, 2));
-    assert(l24.known_term == utils::rational::zero);
+    assert(l24.known_term == 0);
 
     utils::lin l25(1, utils::rational(1, 2));
     l25 = -l25;
     assert(l25.vars.size() == 1);
     assert(l25.vars[1] == utils::rational(-1, 2));
-    assert(l25.known_term == utils::rational::zero);
+    assert(l25.known_term == 0);
 
     utils::lin l26{{{1, utils::rational(1, 2)}, {2, utils::rational(1, 3)}}, utils::rational(1, 4)};
     assert(l26.vars.size() == 2);
