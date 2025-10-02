@@ -13,7 +13,7 @@ namespace utils
   class lit
   {
   public:
-    explicit constexpr lit(var v = std::numeric_limits<var>::max(), bool sign = true) : x((v << 1) + sign) {}
+    constexpr lit(var v = std::numeric_limits<var>::max(), bool sign = true) : x((v << 1) + sign) {}
 
     /**
      * @brief Get the variable of the literal.

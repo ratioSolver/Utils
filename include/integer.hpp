@@ -13,9 +13,9 @@ namespace utils
     static const integer positive_infinite;
     static const integer negative_infinite;
 
-    explicit integer() noexcept;
-    explicit integer(INT_TYPE val) noexcept;
-    explicit integer(INT_TYPE val, bool is_inf) noexcept;
+    integer() noexcept;
+    integer(INT_TYPE val) noexcept;
+    integer(INT_TYPE val, bool is_inf) noexcept;
 
     [[nodiscard]] INT_TYPE value() const noexcept { return val; }
 

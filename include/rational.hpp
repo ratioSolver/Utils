@@ -12,9 +12,9 @@ namespace utils
     static const rational positive_infinite;
     static const rational negative_infinite;
 
-    explicit rational() noexcept;
-    explicit rational(INT_TYPE n) noexcept;
-    explicit rational(INT_TYPE n, INT_TYPE d) noexcept;
+    rational() noexcept;
+    rational(INT_TYPE n) noexcept;
+    rational(INT_TYPE n, INT_TYPE d) noexcept;
 
     [[nodiscard]] INT_TYPE numerator() const noexcept { return num; }
     [[nodiscard]] INT_TYPE denominator() const noexcept { return den; }

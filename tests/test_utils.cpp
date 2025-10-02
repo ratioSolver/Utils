@@ -244,6 +244,12 @@ void test_lin()
     assert(l25.vars.size() == 1);
     assert(l25.vars[1] == utils::rational(-1, 2));
     assert(l25.known_term == utils::rational::zero);
+
+    utils::lin l26{{{1, utils::rational(1, 2)}, {2, utils::rational(1, 3)}}, utils::rational(1, 4)};
+    assert(l26.vars.size() == 2);
+    assert(l26.vars[1] == utils::rational(1, 2));
+    assert(l26.vars[2] == utils::rational(1, 3));
+    assert(l26.known_term == utils::rational(1, 4));
 }
 
 void test_tableau()

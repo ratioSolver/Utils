@@ -10,12 +10,12 @@ namespace utils
     static const inf_rational zero;
     static const inf_rational epsilon;
 
-    explicit inf_rational() = default;
-    explicit inf_rational(INT_TYPE nun) noexcept : rat(nun) {}
-    explicit inf_rational(const rational &rat) noexcept : rat(rat) {}
-    explicit inf_rational(INT_TYPE nun, INT_TYPE den) noexcept : rat(nun, den) {}
-    explicit inf_rational(const rational &rat, INT_TYPE inf) noexcept : rat(rat), inf(inf) {}
-    explicit inf_rational(const rational &rat, const rational &inf) noexcept : rat(rat), inf(inf) {}
+    inf_rational() = default;
+    inf_rational(INT_TYPE nun) noexcept : rat(nun) {}
+    inf_rational(const rational &rat) noexcept : rat(rat) {}
+    inf_rational(INT_TYPE nun, INT_TYPE den) noexcept : rat(nun, den) {}
+    inf_rational(const rational &rat, INT_TYPE inf) noexcept : rat(rat), inf(inf) {}
+    inf_rational(const rational &rat, const rational &inf) noexcept : rat(rat), inf(inf) {}
 
     [[nodiscard]] rational get_rational() const noexcept { return rat; }
     [[nodiscard]] rational get_infinitesimal() const noexcept { return inf; }

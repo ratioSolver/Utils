@@ -16,21 +16,34 @@ namespace utils
     /**
      * @brief Construct a new linear expression object.
      */
-    explicit lin() = default;
+    lin() = default;
 
+    /**
+     * @brief Construct a new linear expression object with a known term.
+     *
+     * @param n known term as an integer.
+     */
+    lin(INT_TYPE n) : known_term(n) {}
     /**
      * @brief Construct a new linear expression object with a known term.
      *
      * @param known_term known term.
      */
-    explicit lin(const rational &known_term) : known_term(known_term) {}
+    lin(const rational &known_term) : known_term(known_term) {}
     /**
      * @brief Construct a new linear expression object given the `v` variable and the `c` coefficient.
      *
      * @param v the variable of the linear expression.
      * @param c the coefficient of the `v` variable.
      */
-    explicit lin(const var v, const rational &c) { vars.emplace(v, c); }
+    lin(const var v, const rational &c) { vars.emplace(v, c); }
+    /**
+     * @brief Construct a new linear expression object from an initializer list of variable-coefficient pairs and an optional known term.
+     *
+     * @param init An initializer list of pairs, where each pair consists of a variable and its corresponding coefficient.
+     * @param known_term An optional known term for the linear expression (default is zero).
+     */
+    lin(std::initializer_list<std::pair<const var, rational>> init, const rational &known_term = rational::zero) : vars(init), known_term(known_term) {}
 
   public:
     [[nodiscard]] lin operator+(const lin &rhs) const noexcept;
