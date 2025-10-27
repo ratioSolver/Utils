@@ -97,8 +97,8 @@ namespace utils
   private:
     void process_bytes(const void *const data, size_t len)
     {
-      const unsigned char *block = static_cast<const unsigned char *>(data);
-      process_block(block, block + len);
+      const unsigned char *blck = static_cast<const unsigned char *>(data);
+      process_block(blck, blck + len);
     }
 
     void process_byte(unsigned char octet)
