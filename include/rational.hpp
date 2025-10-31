@@ -19,16 +19,16 @@ namespace utils
     [[nodiscard]] INT_TYPE numerator() const noexcept { return num; }
     [[nodiscard]] INT_TYPE denominator() const noexcept { return den; }
 
-    [[nodiscard]] inline friend bool is_integer(const rational &rhs) noexcept { return rhs.den == 1; }
-    [[nodiscard]] inline friend bool is_zero(const rational &rhs) noexcept { return rhs.num == 0; }
-    [[nodiscard]] inline friend bool is_positive(const rational &rhs) noexcept { return rhs.num > 0; }
-    [[nodiscard]] inline friend bool is_positive_or_zero(const rational &rhs) noexcept { return rhs.num >= 0; }
-    [[nodiscard]] inline friend bool is_negative(const rational &rhs) noexcept { return rhs.num < 0; }
-    [[nodiscard]] inline friend bool is_negative_or_zero(const rational &rhs) noexcept { return rhs.num <= 0; }
-    [[nodiscard]] inline friend bool is_infinite(const rational &rhs) noexcept { return rhs.den == 0; }
-    [[nodiscard]] inline friend bool is_positive_infinite(const rational &rhs) noexcept { return is_positive(rhs) && is_infinite(rhs); }
-    [[nodiscard]] inline friend bool is_negative_infinite(const rational &rhs) noexcept { return is_negative(rhs) && is_infinite(rhs); }
-    [[nodiscard]] inline friend double to_double(const rational &rhs) noexcept { return static_cast<double>(rhs.num) / rhs.den; }
+    friend bool is_integer(const rational &rhs) noexcept;
+    friend bool is_zero(const rational &rhs) noexcept;
+    friend bool is_positive(const rational &rhs) noexcept;
+    friend bool is_positive_or_zero(const rational &rhs) noexcept;
+    friend bool is_negative(const rational &rhs) noexcept;
+    friend bool is_negative_or_zero(const rational &rhs) noexcept;
+    friend bool is_infinite(const rational &rhs) noexcept;
+    friend bool is_positive_infinite(const rational &rhs) noexcept;
+    friend bool is_negative_infinite(const rational &rhs) noexcept;
+    friend double to_double(const rational &rhs) noexcept;
 
     [[nodiscard]] bool operator!=(const rational &rhs) const noexcept;
     [[nodiscard]] bool operator<(const rational &rhs) const noexcept;
@@ -106,6 +106,17 @@ namespace utils
     INT_TYPE num; // the numerator..
     INT_TYPE den; // the denominator..
   };
+
+  [[nodiscard]] inline bool is_integer(const rational &rhs) noexcept { return rhs.den == 1; }
+  [[nodiscard]] inline bool is_zero(const rational &rhs) noexcept { return rhs.num == 0; }
+  [[nodiscard]] inline bool is_positive(const rational &rhs) noexcept { return rhs.num > 0; }
+  [[nodiscard]] inline bool is_positive_or_zero(const rational &rhs) noexcept { return rhs.num >= 0; }
+  [[nodiscard]] inline bool is_negative(const rational &rhs) noexcept { return rhs.num < 0; }
+  [[nodiscard]] inline bool is_negative_or_zero(const rational &rhs) noexcept { return rhs.num <= 0; }
+  [[nodiscard]] inline bool is_infinite(const rational &rhs) noexcept { return rhs.den == 0; }
+  [[nodiscard]] inline bool is_positive_infinite(const rational &rhs) noexcept { return is_positive(rhs) && is_infinite(rhs); }
+  [[nodiscard]] inline bool is_negative_infinite(const rational &rhs) noexcept { return is_negative(rhs) && is_infinite(rhs); }
+  [[nodiscard]] inline double to_double(const rational &rhs) noexcept { return static_cast<double>(rhs.num) / rhs.den; }
 
   [[nodiscard]] std::string to_string(const rational &rhs) noexcept;
 } // namespace utils
