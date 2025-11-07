@@ -118,5 +118,17 @@ namespace utils
   [[nodiscard]] inline bool is_negative_infinite(const rational &rhs) noexcept { return is_negative(rhs) && is_infinite(rhs); }
   [[nodiscard]] inline double to_double(const rational &rhs) noexcept { return static_cast<double>(rhs.num) / rhs.den; }
 
+  [[nodiscard]] inline rational operator+(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
+  [[nodiscard]] inline rational operator-(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
+  [[nodiscard]] inline rational operator*(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
+  [[nodiscard]] inline rational operator/(const INT_TYPE &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
+
+  [[nodiscard]] inline bool operator!=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs != lhs; }
+  [[nodiscard]] inline bool operator<(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs > lhs; }
+  [[nodiscard]] inline bool operator<=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs >= lhs; }
+  [[nodiscard]] inline bool operator==(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs == lhs; }
+  [[nodiscard]] inline bool operator>=(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs <= lhs; }
+  [[nodiscard]] inline bool operator>(const INT_TYPE &lhs, const rational &rhs) noexcept { return rhs < lhs; }
+
   [[nodiscard]] std::string to_string(const rational &rhs) noexcept;
 } // namespace utils
