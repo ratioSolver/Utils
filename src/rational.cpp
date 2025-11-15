@@ -1,37 +1,38 @@
-#include "rational.h"
+#include "rational.hpp"
 #include <numeric>
+#include <cmath>
 #include <cassert>
 
 namespace utils
 {
-    UTILS_EXPORT const rational rational::ZERO(0);
-    UTILS_EXPORT const rational rational::ONE(1);
-    UTILS_EXPORT const rational rational::NEGATIVE_INFINITY(-1, 0);
-    UTILS_EXPORT const rational rational::POSITIVE_INFINITY(1, 0);
+    const rational rational::zero(0);
+    const rational rational::one(1);
+    const rational rational::negative_infinite(-1, 0);
+    const rational rational::positive_infinite(1, 0);
 
-    UTILS_EXPORT rational::rational() : num(0), den(1) {}
-    UTILS_EXPORT rational::rational(I n) : num(n), den(1) {}
-    UTILS_EXPORT rational::rational(I n, I d) : num(n), den(d)
+    rational::rational() noexcept : num(0), den(1) {}
+    rational::rational(INT_TYPE n) noexcept : num(n), den(1) {}
+    rational::rational(INT_TYPE n, INT_TYPE d) noexcept : num(n), den(d)
     {
         assert(n != 0 || d != 0);
         normalize();
     }
 
-    UTILS_EXPORT bool rational::operator!=(const rational &rhs) const noexcept { return num != rhs.num || den != rhs.den; }
-    UTILS_EXPORT bool rational::operator<(const rational &rhs) const noexcept { return (den == rhs.den) ? num < rhs.num : num * rhs.den < den * rhs.num; }
-    UTILS_EXPORT bool rational::operator<=(const rational &rhs) const noexcept { return num * rhs.den <= den * rhs.num; }
-    UTILS_EXPORT bool rational::operator==(const rational &rhs) const noexcept { return num == rhs.num && den == rhs.den; }
-    UTILS_EXPORT bool rational::operator>=(const rational &rhs) const noexcept { return num * rhs.den >= den * rhs.num; }
-    UTILS_EXPORT bool rational::operator>(const rational &rhs) const noexcept { return (den == rhs.den) ? num > rhs.num : num * rhs.den > den * rhs.num; }
+    bool rational::operator!=(const rational &rhs) const noexcept { return num != rhs.num || den != rhs.den; }
+    bool rational::operator<(const rational &rhs) const noexcept { return (den == rhs.den) ? num < rhs.num : num * rhs.den < den * rhs.num; }
+    bool rational::operator<=(const rational &rhs) const noexcept { return num * rhs.den <= den * rhs.num; }
+    bool rational::operator==(const rational &rhs) const noexcept { return num == rhs.num && den == rhs.den; }
+    bool rational::operator>=(const rational &rhs) const noexcept { return num * rhs.den >= den * rhs.num; }
+    bool rational::operator>(const rational &rhs) const noexcept { return (den == rhs.den) ? num > rhs.num : num * rhs.den > den * rhs.num; }
 
-    UTILS_EXPORT bool rational::operator!=(const I &rhs) const noexcept { return num != rhs || den != 1; }
-    UTILS_EXPORT bool rational::operator<(const I &rhs) const noexcept { return num < den * rhs; }
-    UTILS_EXPORT bool rational::operator<=(const I &rhs) const noexcept { return num <= den * rhs; }
-    UTILS_EXPORT bool rational::operator==(const I &rhs) const noexcept { return num == rhs && den == 1; }
-    UTILS_EXPORT bool rational::operator>=(const I &rhs) const noexcept { return num >= den * rhs; }
-    UTILS_EXPORT bool rational::operator>(const I &rhs) const noexcept { return num > den * rhs; }
+    bool rational::operator!=(const INT_TYPE &rhs) const noexcept { return num != rhs || den != 1; }
+    bool rational::operator<(const INT_TYPE &rhs) const noexcept { return num < den * rhs; }
+    bool rational::operator<=(const INT_TYPE &rhs) const noexcept { return num <= den * rhs; }
+    bool rational::operator==(const INT_TYPE &rhs) const noexcept { return num == rhs && den == 1; }
+    bool rational::operator>=(const INT_TYPE &rhs) const noexcept { return num >= den * rhs; }
+    bool rational::operator>(const INT_TYPE &rhs) const noexcept { return num > den * rhs; }
 
-    UTILS_EXPORT rational rational::operator+(const rational &rhs) const noexcept
+    rational rational::operator+(const rational &rhs) const noexcept
     {
         assert(den != 0 || rhs.den != 0 || num == rhs.num); // inf + -inf or -inf + inf..
 
@@ -43,38 +44,41 @@ namespace utils
         if (den == 1 && rhs.den == 1)
             return rational(num + rhs.num);
 
-        I f = std::gcd(num, rhs.num);
-        I g = std::gcd(den, rhs.den);
+        INT_TYPE f = std::gcd(num, rhs.num);
+        INT_TYPE g = std::gcd(den, rhs.den);
 
         rational res((num / f) * (rhs.den / g) + (rhs.num / f) * (den / g), std::lcm(den, rhs.den));
         res.num *= f;
         return res;
     }
 
-    UTILS_EXPORT rational rational::operator-(const rational &rhs) const noexcept { return operator+(-rhs); }
+    rational rational::operator-(const rational &rhs) const noexcept { return operator+(-rhs); }
 
-    UTILS_EXPORT rational rational::operator*(const rational &rhs) const noexcept
+    rational rational::operator*(const rational &rhs) const noexcept
     {
         assert(num != 0 || rhs.den != 0); // 0*inf..
         assert(den != 0 || rhs.num != 0); // inf*0..
 
         // special cases..
-        if (rhs == ONE)
+        if (rhs == one)
             return *this;
-        if (operator==(ONE))
+        if (operator==(one))
             return rhs;
         if (den == 1 && rhs.den == 1)
             return rational(num * rhs.num);
         if (is_infinite(*this) || is_infinite(rhs))
-            return ((num >= 0 && rhs.num >= 0) || (num <= 0 && rhs.num <= 0)) ? POSITIVE_INFINITY : NEGATIVE_INFINITY;
+            return ((num >= 0 && rhs.num >= 0) || (num <= 0 && rhs.num <= 0)) ? positive_infinite : negative_infinite;
 
         rational c(num, rhs.den);
         rational d(rhs.num, den);
         return rational(c.num * d.num, c.den * d.den);
     }
 
-    UTILS_EXPORT rational rational::operator/(const rational &rhs) const noexcept
+    rational rational::operator/(const rational &rhs) const noexcept
     {
+        assert(rhs.num != 0 || rhs.den != 0 || num == 0); // 0/0..
+        assert(rhs.num != 0 || rhs.den != 0 || den == 0); // inf/inf..
+
         rational rec;
         if (rhs.num >= 0)
         {
@@ -89,7 +93,7 @@ namespace utils
         return operator*(rec);
     }
 
-    UTILS_EXPORT rational rational::operator+(const I &rhs) const noexcept
+    rational rational::operator+(const INT_TYPE &rhs) const noexcept
     {
         // special cases..
         if (num == 0)
@@ -105,27 +109,31 @@ namespace utils
         return res;
     }
 
-    UTILS_EXPORT rational rational::operator-(const I &rhs) const noexcept { return operator+(-rhs); }
+    rational rational::operator-(const INT_TYPE &rhs) const noexcept { return operator+(-rhs); }
 
-    UTILS_EXPORT rational rational::operator*(const I &rhs) const noexcept
+    rational rational::operator*(const INT_TYPE &rhs) const noexcept
     {
         assert(den != 0 || rhs != 0); // inf*0..
+        assert(rhs != 0 || den != 0); // 0*inf..
 
         // special cases..
         if (rhs == 1)
             return *this;
-        if (operator==(ONE))
+        if (operator==(one))
             return rational(rhs);
         if (den == 1)
             return rational(num * rhs);
         if (is_infinite(*this))
-            return ((num >= 0 && rhs >= 0) || (num <= 0 && rhs <= 0)) ? POSITIVE_INFINITY : NEGATIVE_INFINITY;
+            return ((num >= 0 && rhs >= 0) || (num <= 0 && rhs <= 0)) ? positive_infinite : negative_infinite;
 
         return rational(num * rhs, den);
     }
 
-    UTILS_EXPORT rational rational::operator/(const I &rhs) const noexcept
+    rational rational::operator/(const INT_TYPE &rhs) const noexcept
     {
+        assert(rhs != 0 || num == 0); // 0/0..
+        assert(rhs != 0 || den == 0); // inf/inf..
+
         rational rec;
         rec.num = 1;
         rec.den = rhs;
@@ -142,7 +150,7 @@ namespace utils
         return operator*(rec);
     }
 
-    UTILS_EXPORT rational &rational::operator+=(const rational &rhs) noexcept
+    rational &rational::operator+=(const rational &rhs) noexcept
     {
         assert(den != 0 || rhs.den != 0 || num == rhs.num); // inf + -inf or -inf + inf..
 
@@ -161,8 +169,8 @@ namespace utils
             return *this;
         }
 
-        I f = std::gcd(num, rhs.num);
-        I g = std::gcd(den, rhs.den);
+        INT_TYPE f = std::gcd(num, rhs.num);
+        INT_TYPE g = std::gcd(den, rhs.den);
 
         num = (num / f) * (rhs.den / g) + (rhs.num / f) * (den / g);
         den = std::lcm(den, rhs.den);
@@ -171,17 +179,17 @@ namespace utils
         return *this;
     }
 
-    UTILS_EXPORT rational &rational::operator-=(const rational &rhs) noexcept { return operator+=(-rhs); }
+    rational &rational::operator-=(const rational &rhs) noexcept { return operator+=(-rhs); }
 
-    UTILS_EXPORT rational &rational::operator*=(const rational &rhs) noexcept
+    rational &rational::operator*=(const rational &rhs) noexcept
     {
         assert(num != 0 || rhs.den != 0); // 0*inf..
         assert(den != 0 || rhs.num != 0); // inf*0..
 
         // special cases..
-        if (rhs == ONE)
+        if (rhs == one)
             return *this;
-        if (operator==(ONE))
+        if (operator==(one))
         {
             num = rhs.num;
             den = rhs.den;
@@ -208,8 +216,11 @@ namespace utils
         return *this;
     }
 
-    UTILS_EXPORT rational &rational::operator/=(const rational &rhs) noexcept
+    rational &rational::operator/=(const rational &rhs) noexcept
     {
+        assert(rhs.num != 0 || rhs.den != 0 || num == 0); // 0/0..
+        assert(rhs.num != 0 || rhs.den != 0 || den == 0); // inf/inf..
+
         rational rec;
         rec.num = rhs.den;
         rec.den = rhs.num;
@@ -226,7 +237,7 @@ namespace utils
         return operator*=(rec);
     }
 
-    UTILS_EXPORT rational &rational::operator+=(const I &rhs) noexcept
+    rational &rational::operator+=(const INT_TYPE &rhs) noexcept
     {
         // special cases..
         if (num == 0)
@@ -246,16 +257,17 @@ namespace utils
         return *this;
     }
 
-    UTILS_EXPORT rational &rational::operator-=(const I &rhs) noexcept { return operator+=(-rhs); }
+    rational &rational::operator-=(const INT_TYPE &rhs) noexcept { return operator+=(-rhs); }
 
-    UTILS_EXPORT rational &rational::operator*=(const I &rhs) noexcept
+    rational &rational::operator*=(const INT_TYPE &rhs) noexcept
     {
         assert(den != 0 || rhs != 0); // inf*0..
+        assert(rhs != 0 || den != 0); // 0*inf..
 
         // special cases..
         if (rhs == 1)
             return *this;
-        if (operator==(ONE))
+        if (operator==(one))
         {
             num = rhs;
             return *this;
@@ -273,8 +285,11 @@ namespace utils
         return *this;
     }
 
-    UTILS_EXPORT rational &rational::operator/=(const I &rhs) noexcept
+    rational &rational::operator/=(const INT_TYPE &rhs) noexcept
     {
+        assert(rhs != 0 || num == 0); // 0/0..
+        assert(rhs != 0 || den == 0); // inf/inf..
+
         rational rec;
         rec.num = 1;
         rec.den = rhs;
@@ -291,23 +306,38 @@ namespace utils
         return operator*=(rec);
     }
 
-    UTILS_EXPORT rational operator+(const I &lhs, const rational &rhs) noexcept { return rational(lhs) + rhs; }
-    UTILS_EXPORT rational operator-(const I &lhs, const rational &rhs) noexcept { return rational(lhs) - rhs; }
-    UTILS_EXPORT rational operator*(const I &lhs, const rational &rhs) noexcept { return rational(lhs) * rhs; }
-    UTILS_EXPORT rational operator/(const I &lhs, const rational &rhs) noexcept { return rational(lhs) / rhs; }
-
-    UTILS_EXPORT rational rational::operator-() const noexcept
+    rational rational::operator-() const noexcept
     {
         rational res(*this);
         res.num = -res.num;
         return res;
     }
 
+    [[nodiscard]] INT_TYPE floor(const rational &rhs) noexcept
+    {
+        if (rhs.den == 1)
+            return rhs.num;
+        else if (rhs.num >= 0)
+            return rhs.num / rhs.den;
+        else
+            return rhs.num / rhs.den - 1;
+    }
+
+    [[nodiscard]] INT_TYPE ceil(const rational &rhs) noexcept
+    {
+        if (rhs.den == 1)
+            return rhs.num;
+        else if (rhs.num >= 0)
+            return rhs.num / rhs.den + 1;
+        else
+            return rhs.num / rhs.den;
+    }
+
     void rational::normalize() noexcept
     {
         if (den != 1)
         {
-            I c_gcd = std::gcd(num, den);
+            INT_TYPE c_gcd = std::gcd(num, den);
             num /= c_gcd;
             den /= c_gcd;
             if (den < 0)
@@ -318,7 +348,7 @@ namespace utils
         }
     }
 
-    UTILS_EXPORT std::string to_string(const rational &rhs) noexcept
+    std::string to_string(const rational &rhs) noexcept
     {
         switch (rhs.den)
         {

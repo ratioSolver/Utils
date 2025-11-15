@@ -1,83 +1,65 @@
-cmake_minimum_required(VERSION 3.0.0)
-project(utils VERSION 0.1.0)
+cmake_minimum_required(VERSION 3.21)
+project(utils VERSION 0.2.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
-
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-
-include(GenerateExportHeader)
-include(GNUInstallDirs)
-include(CMakePackageConfigHelpers)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/Modules")
+include(Sanitizers)
 
 include(CTest)
 enable_testing()
 
-set(INTEGER_TYPES "int" "long" "long long")
-set(INTEGER_TYPE "long" CACHE STRING "Integer type")
-set_property(CACHE INTEGER_TYPE PROPERTY STRINGS ${INTEGER_TYPES})
+set(INT_TYPES "int" "long" "long long")
+set(INT_TYPE "long" CACHE STRING "Integer type")
+set_property(CACHE INT_TYPE PROPERTY STRINGS ${INT_TYPES})
+list(FIND INT_TYPES ${INT_TYPE} INT_TYPE_INDEX)
+if(${INT_TYPE_INDEX} EQUAL -1)
+    message(FATAL_ERROR "Invalid integer type: ${INT_TYPE}")
+endif()
 
-option(VERBOSE_LOG "Makes log more verbose" OFF)
-option(ADD_COVERAGE "Add coverage" OFF)
+set(LOGGING_LEVELS "TRACE" "DEBUG" "INFO" "WARN" "ERROR" "FATAL")
+set(LOGGING_LEVEL "INFO" CACHE STRING "Logging level")
+set_property(CACHE LOGGING_LEVEL PROPERTY STRINGS ${LOGGING_LEVELS})
+list(FIND LOGGING_LEVELS ${LOGGING_LEVEL} LOGGING_LEVEL_INDEX)
+if(${LOGGING_LEVEL_INDEX} EQUAL -1)
+    message(FATAL_ERROR "Invalid logging level: ${LOGGING_LEVEL}")
+endif()
 
-file(GLOB UTILS_SOURCES src/*.cpp)
-file(GLOB UTILS_HEADERS include/*.h)
+option(BUILD_CRYPTO "Build crypto" OFF)
 
-add_library(${PROJECT_NAME} SHARED ${UTILS_SOURCES})
-GENERATE_EXPORT_HEADER(${PROJECT_NAME})
-target_include_directories(${PROJECT_NAME} PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>/include $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>)
+if(LOGGING_LEVEL STREQUAL "TRACE")
+    set(LOG_LEVEL 6)
+elseif(LOGGING_LEVEL STREQUAL "DEBUG")
+    set(LOG_LEVEL 5)
+elseif(LOGGING_LEVEL STREQUAL "INFO")
+    set(LOG_LEVEL 4)
+elseif(LOGGING_LEVEL STREQUAL "WARN")
+    set(LOG_LEVEL 3)
+elseif(LOGGING_LEVEL STREQUAL "ERROR")
+    set(LOG_LEVEL 2)
+elseif(LOGGING_LEVEL STREQUAL "FATAL")
+    set(LOG_LEVEL 1)
+endif()
 
-message(STATUS "Integer type:           ${INTEGER_TYPE}")
-if(INTEGER_TYPE STREQUAL "int")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_INT)
-elseif(INTEGER_TYPE STREQUAL "long")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_LONG)
-elseif(INTEGER_TYPE STREQUAL "long long")
-    target_compile_definitions(${PROJECT_NAME} PUBLIC INTEGER_TYPE_LONG_LONG)
-else()
-    message(FATAL_ERROR "INTEGER_TYPE must be one of ${INTEGER_TYPES}")
+message(STATUS "Integer type: ${INT_TYPE}")
+message(STATUS "Logging level: ${LOGGING_LEVEL}")
+
+add_library(utils src/integer.cpp src/rational.cpp src/inf_rational.cpp src/lin.cpp src/tableau.cpp src/timer.cpp)
+target_compile_features(utils PUBLIC cxx_std_17)
+target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
+target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
+setup_sanitizers(utils)
+
+message(STATUS "Build crypto: ${BUILD_CRYPTO}")
+if(BUILD_CRYPTO)
+    find_package(OpenSSL REQUIRED)
+
+    target_sources(utils PRIVATE src/crypto.cpp)
+    target_link_libraries(utils PUBLIC OpenSSL::Crypto)
 endif()
 
 if(BUILD_TESTING)
     add_subdirectory(tests)
 endif()
 
-message(STATUS "Verbose log:            ${VERBOSE_LOG}")
-if(VERBOSE_LOG)
-    target_compile_definitions(${PROJECT_NAME} PUBLIC VERBOSE_LOG)
-endif()
-
-if(MSVC)
-    target_compile_options(${PROJECT_NAME} PRIVATE /W4)
-else()
-    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wpedantic)
-    if (ADD_COVERAGE)
-        if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-            target_compile_options(${PROJECT_NAME} PRIVATE --coverage)
-            target_link_libraries(${PROJECT_NAME} PUBLIC gcov)
-        endif()
-    endif()
-endif()
-
-install(
-    TARGETS ${PROJECT_NAME}
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
-install(
-    FILES ${UTILS_HEADERS} ${CMAKE_CURRENT_BINARY_DIR}/utils_export.h
-    DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-)
-configure_package_config_file(src/${PROJECT_NAME}Config.cmake.in ${PROJECT_NAME}Config.cmake INSTALL_DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME} PATH_VARS CMAKE_INSTALL_INCLUDEDIR)
-write_basic_package_version_file(${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake VERSION 1.0.0 COMPATIBILITY SameMajorVersion)
-install(
-    FILES ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}Config.cmake ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
-    DESTINATION ${CMAKE_INSTALL_LIBDIR}/cmake/${PROJECT_NAME}
-)
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_NAME utils)
 set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
 include(CPack)
