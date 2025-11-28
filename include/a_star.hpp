@@ -21,7 +21,7 @@ namespace utils
      *
      * @return A shared pointer to the parent node, or nullptr if there is no parent.
      */
-    [[nodiscard]] std::shared_ptr<node<Tp>> parent() const noexcept { return parent_node.lock(); }
+    [[nodiscard]] std::shared_ptr<node<Tp>> get_parent() const noexcept { return parent_node.lock(); }
 
     /**
      * @brief Returns the cost from the start node to the current node (g-cost).
