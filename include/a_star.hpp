@@ -141,6 +141,26 @@ namespace utils
     virtual void current_node(const node<Tp> &c_node) {}
 #endif
 
+  protected:
+    const node<Tp> &find_common_ancestor(const node &a, const node &b) const
+    {
+      std::unordered_set<const node<Tp> *> ancestors;
+      auto c_a = &a;
+      while (c_a)
+      {
+        ancestors.insert(c_a);
+        c_a = c_a->get_parent() ? c_a->get_parent().get() : nullptr;
+      }
+      auto c_b = &b;
+      while (c_b)
+      {
+        if (ancestors.count(c_b))
+          return *c_b;
+        c_b = c_b->get_parent() ? c_b->get_parent().get() : nullptr;
+      }
+      throw std::runtime_error("No common ancestor found");
+    }
+
   private:
     std::priority_queue<std::shared_ptr<node<Tp>>, std::vector<std::shared_ptr<node<Tp>>>, node_cmp> open_list;
     std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;
