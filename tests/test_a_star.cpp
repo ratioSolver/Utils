@@ -10,7 +10,7 @@ public:
 
     [[nodiscard]] int h_cost() const noexcept override { return 0; }
 
-    [[nodiscard]] std::vector<std::shared_ptr<utils::node<int>>> generate_successors() const override
+    [[nodiscard]] std::vector<std::shared_ptr<utils::node<int>>> generate_successors() override
     {
         std::vector<std::shared_ptr<utils::node<int>>> successors;
         if (g_cost() < 10)

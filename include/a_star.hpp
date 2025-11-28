@@ -74,7 +74,7 @@ namespace utils
      *
      * @return A vector of shared pointers to the successor nodes.
      */
-    [[nodiscard]] virtual std::vector<std::shared_ptr<node<Tp>>> generate_successors() const = 0;
+    [[nodiscard]] virtual std::vector<std::shared_ptr<node<Tp>>> generate_successors() = 0;
 
     /**
      * @brief Checks if the current node represents a goal state.
@@ -186,7 +186,7 @@ namespace utils
       }
     }
 
-    virtual void retract(const node<Tp> &n) noexcept {}
+    virtual void retract(const node<Tp> &) noexcept {}
 
     bool go_to(const node<Tp> &target) noexcept
     {
@@ -209,7 +209,7 @@ namespace utils
       return true;
     }
 
-    virtual bool apply_transition(const node<Tp> &n) noexcept { return true; }
+    virtual bool apply_transition(const node<Tp> &) noexcept { return true; }
 
     [[nodiscard]] node<Tp> &current_node() noexcept { return *c_node; }
 
