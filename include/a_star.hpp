@@ -15,6 +15,15 @@ namespace utils
     virtual ~node() = default;
 
     /**
+     * @brief Returns a shared pointer to the parent node.
+     *
+     * This function provides access to the parent node of the current node in the search tree.
+     *
+     * @return A shared pointer to the parent node, or nullptr if there is no parent.
+     */
+    [[nodiscard]] std::shared_ptr<node<Tp>> parent() const noexcept { return parent_node.lock(); }
+
+    /**
      * @brief Returns the cost from the start node to the current node (g-cost).
      *
      * This function provides access to the g-cost, which represents the cumulative cost
