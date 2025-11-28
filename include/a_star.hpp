@@ -211,7 +211,7 @@ namespace utils
 
     virtual bool apply_transition(const node<Tp> &) noexcept { return true; }
 
-    [[nodiscard]] node<Tp> &current_node() noexcept { return *c_node; }
+    [[nodiscard]] const node<Tp> &get_current_node() const noexcept { return *c_node; }
 
   private:
     std::shared_ptr<node<Tp>> c_node;
