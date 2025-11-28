@@ -4,6 +4,7 @@
 #include <memory>
 #include <queue>
 #include <unordered_set>
+#include <stdexcept>
 
 namespace utils
 {
@@ -116,12 +117,23 @@ namespace utils
     {
       while (!open_list.empty())
       {
-        auto c_node = open_list.top();
+        auto next = open_list.top();
+        open_list.pop();
+#ifdef BUILD_NAVIGATION
+        backtrack_to(find_common_ancestor(*c_node, *next));
+        if (!go_to(*next))
+        { // Conflict detected, backtrack..
+#ifdef BUILD_LISTENERS
+          inconsistent_node(*next);
+#endif
+          continue;
+        }
+#else
+        c_node = next;
 #ifdef BUILD_LISTENERS
         current_node(*c_node);
 #endif
-        open_list.pop();
-
+#endif
         if (c_node->is_goal())
           return c_node;
 
@@ -138,11 +150,12 @@ namespace utils
     }
 
 #ifdef BUILD_LISTENERS
-    virtual void current_node(const node<Tp> &c_node) {}
+    virtual void current_node(const node<Tp> &n) {}
+    virtual void inconsistent_node(const node<Tp> &n) {}
 #endif
 
   protected:
-    const node<Tp> &find_common_ancestor(const node &a, const node &b) const
+    const node<Tp> &find_common_ancestor(const node<Tp> &a, const node<Tp> &b) const
     {
       std::unordered_set<const node<Tp> *> ancestors;
       auto c_a = &a;
@@ -161,7 +174,47 @@ namespace utils
       throw std::runtime_error("No common ancestor found");
     }
 
+    void backtrack_to(const node<Tp> &n) noexcept
+    {
+      while (&c_node->get() != &n)
+      {
+        retract(*c_node);
+        c_node = c_node->get_parent();
+#ifdef BUILD_LISTENERS
+        current_node(*c_node);
+#endif
+      }
+    }
+
+    virtual void retract(const node<Tp> &n) noexcept {}
+
+    bool go_to(const node<Tp> &target) noexcept
+    {
+      std::vector<const node<Tp> *> path;
+      auto temp_node = &target;
+      while (temp_node != &c_node->get())
+      {
+        path.push_back(temp_node);
+        temp_node = temp_node->get_parent().get();
+      }
+      for (auto it = path.rbegin(); it != path.rend(); ++it)
+      {
+        if (!apply_transition(**it))
+          return false;
+        c_node = (*it)->get_parent();
+#ifdef BUILD_LISTENERS
+        current_node(*c_node);
+#endif
+      }
+      return true;
+    }
+
+    virtual bool apply_transition(const node<Tp> &n) noexcept { return true; }
+
+    [[nodiscard]] node<Tp> &current_node() noexcept { return *c_node; }
+
   private:
+    std::shared_ptr<node<Tp>> c_node;
     std::priority_queue<std::shared_ptr<node<Tp>>, std::vector<std::shared_ptr<node<Tp>>>, node_cmp> open_list;
     std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;
   };

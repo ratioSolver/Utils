@@ -23,7 +23,8 @@ if(${LOGGING_LEVEL_INDEX} EQUAL -1)
     message(FATAL_ERROR "Invalid logging level: ${LOGGING_LEVEL}")
 endif()
 
-option(BUILD_LISTENERS "Build listners")
+option(BUILD_LISTENERS "Build listners" OFF)
+option(BUILD_NAVIGATION "Build navigation" OFF)
 option(BUILD_CRYPTO "Build crypto" OFF)
 
 if(LOGGING_LEVEL STREQUAL "TRACE")
@@ -52,6 +53,11 @@ setup_sanitizers(utils)
 message(STATUS "Build listners: ${BUILD_LISTENERS}")
 if(BUILD_LISTENERS)
     target_compile_definitions(utils PUBLIC BUILD_LISTENERS)
+endif()
+
+message(STATUS "Build navigation: ${BUILD_NAVIGATION}")
+if(BUILD_NAVIGATION)
+    target_compile_definitions(utils PUBLIC BUILD_NAVIGATION)
 endif()
 
 message(STATUS "Build crypto: ${BUILD_CRYPTO}")
