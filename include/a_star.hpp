@@ -15,6 +15,16 @@ namespace utils
     virtual ~node() = default;
 
     /**
+     * @brief Returns a unique identifier for the node.
+     *
+     * This function provides a way to uniquely identify each node instance.
+     * The identifier is derived from the memory address of the node object.
+     *
+     * @return A uintptr_t representing the unique identifier of the node.
+     */
+    [[nodiscard]] uintptr_t get_id() const noexcept { return reinterpret_cast<uintptr_t>(this); }
+
+    /**
      * @brief Returns a shared pointer to the parent node.
      *
      * This function provides access to the parent node of the current node in the search tree.
