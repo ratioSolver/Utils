@@ -44,7 +44,7 @@ namespace utils
         auto current = open_list.top().n;
         open_list.pop();
 
-        if (closed_list.contains(current))
+        if (closed_list.count(current))
           continue; // Node already processed with a better or equal cost
 
         if (current->is_goal() || (goal && current == goal))
@@ -57,12 +57,12 @@ namespace utils
 
         for (const auto &[neighbor, cost] : current->get_successors())
         {
-          if (closed_list.contains(neighbor))
+          if (closed_list.count(neighbor))
             continue; // Skip neighbors that are already evaluated
 
           Tp tentative_g_score = g_score.at(current) + cost;
 
-          if (!g_score.contains(neighbor) || tentative_g_score < g_score.at(neighbor))
+          if (!g_score.count(neighbor) || tentative_g_score < g_score.at(neighbor))
           {
             came_from[neighbor] = current;
             g_score[neighbor] = tentative_g_score;
