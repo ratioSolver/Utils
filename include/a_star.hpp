@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include <queue>
+#include <unordered_map>
 #include <unordered_set>
 #include <stdexcept>
 
@@ -137,7 +138,15 @@ namespace utils
         if (c_node->is_goal())
           return c_node;
 
-        closed_list.insert(c_node);
+        if (auto it = closed_list.find(c_node); it != closed_list.end())
+        {
+          if (it->second <= c_node->g_cost())
+            continue; // Already explored with a lower cost
+          else
+            it->second = c_node->g_cost(); // Update with a better cost
+        }
+        else
+          closed_list.emplace(c_node, c_node->g_cost());
 
         for (const auto &successor : c_node->generate_successors())
           if (closed_list.find(successor) != closed_list.end())
@@ -148,11 +157,6 @@ namespace utils
 
       return nullptr; // No solution found
     }
-
-#ifdef BUILD_LISTENERS
-    virtual void current_node(const node<Tp> &n) {}
-    virtual void inconsistent_node(const node<Tp> &n) {}
-#endif
 
   protected:
     const node<Tp> &find_common_ancestor(const node<Tp> &a, const node<Tp> &b) const
@@ -176,7 +180,7 @@ namespace utils
 
     void backtrack_to(const node<Tp> &n) noexcept
     {
-      while (&c_node->get() != &n)
+      while (c_node.get() != &n)
       {
         retract(*c_node);
         c_node = c_node->get_parent();
@@ -186,13 +190,11 @@ namespace utils
       }
     }
 
-    virtual void retract(const node<Tp> &) noexcept {}
-
-    bool go_to(const node<Tp> &target) noexcept
+    bool go_to(node<Tp> &target) noexcept
     {
-      std::vector<const node<Tp> *> path;
+      std::vector<node<Tp> *> path;
       auto temp_node = &target;
-      while (temp_node != &c_node->get())
+      while (temp_node != c_node.get())
       {
         path.push_back(temp_node);
         temp_node = temp_node->get_parent().get();
@@ -209,13 +211,44 @@ namespace utils
       return true;
     }
 
-    virtual bool apply_transition(const node<Tp> &) noexcept { return true; }
-
+    [[nodiscard]] node<Tp> &get_current_node() noexcept { return *c_node; }
     [[nodiscard]] const node<Tp> &get_current_node() const noexcept { return *c_node; }
+
+    /**
+     * @brief Retrieves all nodes from both the closed list and open list.
+     *
+     * This method collects all nodes that have been processed (in the closed list)
+     * and all nodes that are currently queued for processing (in the open list).
+     * The open list is copied to avoid modifying the original priority queue.
+     *
+     * @return A vector containing shared pointers to all nodes in both lists.
+     */
+    [[nodiscard]] std::vector<std::shared_ptr<const node<Tp>>> get_all_nodes() const noexcept
+    {
+      std::vector<std::shared_ptr<const node<Tp>>> nodes;
+      for (const auto &n : closed_list)
+        nodes.push_back(n.first);
+      auto temp_open = open_list;
+      while (!temp_open.empty())
+      {
+        nodes.push_back(temp_open.top());
+        temp_open.pop();
+      }
+      return nodes;
+    }
+
+  private:
+    virtual void retract(const node<Tp> &) noexcept {}
+    virtual bool apply_transition(node<Tp> &) noexcept { return true; }
+
+#ifdef BUILD_LISTENERS
+    virtual void current_node(const node<Tp> &n) {}
+    virtual void inconsistent_node(const node<Tp> &n) {}
+#endif
 
   private:
     std::shared_ptr<node<Tp>> c_node;
     std::priority_queue<std::shared_ptr<node<Tp>>, std::vector<std::shared_ptr<node<Tp>>>, node_cmp> open_list;
-    std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;
+    std::unordered_map<std::shared_ptr<const node<Tp>>, Tp> closed_list;
   };
 } // namespace utils
