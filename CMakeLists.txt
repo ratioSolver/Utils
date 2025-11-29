@@ -24,7 +24,7 @@ if(${LOGGING_LEVEL_INDEX} EQUAL -1)
 endif()
 
 option(BUILD_LISTENERS "Build listners" OFF)
-option(BUILD_NAVIGATION "Build navigation" OFF)
+option(UTILS_A_STAR_ENABLE_NAVIGATION "Enable navigation hooks for the A* solver" OFF)
 option(BUILD_CRYPTO "Build crypto" OFF)
 
 if(LOGGING_LEVEL STREQUAL "TRACE")
@@ -55,9 +55,9 @@ if(BUILD_LISTENERS)
     target_compile_definitions(utils PUBLIC BUILD_LISTENERS)
 endif()
 
-message(STATUS "Build navigation: ${BUILD_NAVIGATION}")
-if(BUILD_NAVIGATION)
-    target_compile_definitions(utils PUBLIC BUILD_NAVIGATION)
+message(STATUS "A* navigation hooks: ${UTILS_A_STAR_ENABLE_NAVIGATION}")
+if(UTILS_A_STAR_ENABLE_NAVIGATION)
+    target_compile_definitions(utils PUBLIC UTILS_A_STAR_ENABLE_NAVIGATION)
 endif()
 
 message(STATUS "Build crypto: ${BUILD_CRYPTO}")

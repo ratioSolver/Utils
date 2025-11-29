@@ -55,10 +55,29 @@ void test_returns_null_when_unreachable()
     assert(result == nullptr);
 }
 
+void test_handles_cycles_without_infinite_loop()
+{
+    auto start = std::make_shared<test_node>("start", false, 3);
+    auto cycle_a = std::make_shared<test_node>("cycle_a", false, 2);
+    auto cycle_b = std::make_shared<test_node>("cycle_b", false, 1);
+    auto goal = std::make_shared<test_node>("goal", true, 0);
+
+    start->add_neighbor(cycle_a, 1);
+    cycle_a->add_neighbor(cycle_b, 1);
+    cycle_b->add_neighbor(cycle_a, 1); // Forms the cycle
+    cycle_b->add_neighbor(goal, 1);
+
+    utils::a_star<int> solver(start);
+    auto result = solver.search(goal);
+
+    assert(result == goal);
+}
+
 int main()
 {
     test_finds_goal_with_shortest_path();
     test_returns_null_when_unreachable();
+    test_handles_cycles_without_infinite_loop();
 
     return 0;
 }

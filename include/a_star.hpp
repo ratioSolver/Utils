@@ -47,9 +47,23 @@ namespace utils
         if (closed_list.count(current))
           continue; // Node already processed with a better or equal cost
 
+#ifdef UTILS_A_STAR_ENABLE_NAVIGATION
+        backtrack_to(find_common_ancestor(c_node, current));
+        if (!advance_to(*current))
+        { // Conflict detected, backtrack..
+#ifdef BUILD_LISTENERS
+          inconsistent_node(*current);
+#endif
+          continue;
+        }
+#endif
+
         if (current->is_goal() || (goal && current == goal))
         {
           c_node = current;
+#ifdef BUILD_LISTENERS
+          current_node(*c_node);
+#endif
           return current;
         }
 
@@ -73,6 +87,83 @@ namespace utils
       }
       return nullptr; // No path found
     }
+
+  protected:
+    std::shared_ptr<node<Tp>> find_common_ancestor(std::shared_ptr<node<Tp>> a, std::shared_ptr<node<Tp>> b) const
+    {
+      std::unordered_set<std::shared_ptr<node<Tp>>> ancestors;
+      while (a)
+      {
+        ancestors.insert(a);
+        a = came_from.at(a);
+      }
+      while (b)
+      {
+        if (ancestors.count(b))
+          return b;
+        b = came_from.at(b);
+      }
+      return nullptr;
+    }
+
+    void backtrack_to(std::shared_ptr<node<Tp>> n) noexcept
+    {
+      while (c_node != n)
+      {
+        retract(*c_node);
+        c_node = came_from.at(c_node);
+#ifdef BUILD_LISTENERS
+        current_node(*c_node);
+#endif
+      }
+    }
+
+    bool advance_to(const node<Tp> &target) noexcept
+    {
+      std::vector<node<Tp> *> path;
+      auto temp_node = &target;
+      while (temp_node != c_node.get())
+      {
+        path.push_back(temp_node);
+        temp_node = temp_node->get_parent().get();
+      }
+      for (auto it = path.rbegin(); it != path.rend(); ++it)
+      {
+        if (!expand(**it))
+          return false;
+        c_node = (*it)->get_parent();
+#ifdef BUILD_LISTENERS
+        current_node(*c_node);
+#endif
+      }
+      return true;
+    }
+
+    [[nodiscard]] node<Tp> &get_current_node() noexcept { return *c_node; }
+    [[nodiscard]] const node<Tp> &get_current_node() const noexcept { return *c_node; }
+
+    [[nodiscard]] std::vector<std::shared_ptr<const node<Tp>>> get_all_nodes() const noexcept
+    {
+      std::vector<std::shared_ptr<const node<Tp>>> nodes;
+      for (const auto &n : closed_list)
+        nodes.push_back(n);
+      auto temp_open = open_list;
+      while (!temp_open.empty())
+      {
+        nodes.push_back(temp_open.top().n);
+        temp_open.pop();
+      }
+      return nodes;
+    }
+
+  private:
+    virtual void retract(const node<Tp> &) noexcept {}
+    virtual bool expand(node<Tp> &) noexcept { return true; }
+
+#ifdef BUILD_LISTENERS
+    virtual void current_node(const node<Tp> &) {}
+    virtual void inconsistent_node(const node<Tp> &) {}
+#endif
 
   private:
     std::shared_ptr<node<Tp>> c_node;                                                         // Current node being processed
