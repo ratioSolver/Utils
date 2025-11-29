@@ -72,7 +72,7 @@ namespace utils
     {
       c_node = root;
       open_list.push({root, root->cost()});
-      came_from[root] = nullptr;
+      came_from[root.get()] = nullptr;
       g_score[root] = 0;
     }
     virtual ~a_star() = default;
@@ -118,7 +118,7 @@ namespace utils
 
           if (!g_score.count(neighbor) || tentative_g_score < g_score.at(neighbor))
           {
-            came_from[neighbor] = current;
+            came_from[neighbor.get()] = current.get();
             g_score[neighbor] = tentative_g_score;
             Tp f_cost = tentative_g_score + neighbor->cost(goal);
             open_list.push({neighbor, f_cost});
@@ -135,13 +135,13 @@ namespace utils
       while (a)
       {
         ancestors.insert(a);
-        a = came_from.at(a);
+        a = came_from.at(a.get());
       }
       while (b)
       {
         if (ancestors.count(b))
           return b;
-        b = came_from.at(b);
+        b = came_from.at(b.get());
       }
       return nullptr;
     }
@@ -151,7 +151,7 @@ namespace utils
       while (c_node != n)
       {
         retract(*c_node);
-        c_node = came_from.at(c_node);
+        c_node = came_from.at(c_node.get());
 #ifdef UTILS_A_STAR_ENABLE_LISTENERS
         current_node(*c_node);
 #endif
@@ -186,7 +186,7 @@ namespace utils
       while (current)
       {
         path.push_back(current);
-        auto it = came_from.find(current);
+        auto it = came_from.find(current.get());
         if (it == came_from.end() || it->second == nullptr)
           break;
         current = it->second;
@@ -222,10 +222,10 @@ namespace utils
 #endif
 
   private:
-    std::shared_ptr<node<Tp>> c_node;                                                         // Current node being processed
-    std::priority_queue<pq_elem, std::vector<pq_elem>, std::greater<>> open_list;             // Priority queue of nodes to explore
-    std::unordered_map<std::shared_ptr<const node<Tp>>, std::shared_ptr<node<Tp>>> came_from; // Best path to each node
-    std::unordered_map<std::shared_ptr<const node<Tp>>, Tp> g_score;                          // Cost from start to each node
-    std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;                          // Set of nodes already evaluated
+    std::shared_ptr<node<Tp>> c_node;                                             // Current node being processed
+    std::priority_queue<pq_elem, std::vector<pq_elem>, std::greater<>> open_list; // Priority queue of nodes to explore
+    std::unordered_map<const node<Tp> *, const node<Tp> *> came_from;             // Best path to each node
+    std::unordered_map<std::shared_ptr<const node<Tp>>, Tp> g_score;              // Cost from start to each node
+    std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;              // Set of nodes already evaluated
   };
 } // namespace utils
