@@ -4,23 +4,39 @@
 #include <memory>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 class test_node final : public utils::node<int>
 {
 public:
     test_node(std::string name, bool goal = false, int heuristic = 0) : id(std::move(name)), goal(goal), heuristic(heuristic) {}
 
-    void add_neighbor(const std::shared_ptr<test_node> &neighbor, int cost) { neighbors[neighbor] = cost; }
+    void add_neighbor(const std::shared_ptr<test_node> &neighbor, int cost) { neighbors.emplace_back(neighbor, cost); }
 
     [[nodiscard]] int cost(std::shared_ptr<utils::node<int>> = nullptr) const noexcept override { return heuristic; }
-    [[nodiscard]] std::unordered_map<std::shared_ptr<utils::node<int>>, int> get_successors() override { return neighbors; }
+    [[nodiscard]] std::unordered_map<std::shared_ptr<utils::node<int>>, int> get_successors() override
+    {
+        std::unordered_map<std::shared_ptr<utils::node<int>>, int> successors;
+        successors.reserve(neighbors.size());
+
+        for (auto it = neighbors.begin(); it != neighbors.end();)
+            if (auto locked = it->first.lock())
+            {
+                successors.emplace(std::move(locked), it->second);
+                ++it;
+            }
+            else
+                it = neighbors.erase(it); // Drop edges to expired nodes.
+
+        return successors;
+    }
     [[nodiscard]] bool is_goal() const noexcept override { return goal; }
 
 private:
     std::string id;
     bool goal;
     int heuristic;
-    std::unordered_map<std::shared_ptr<utils::node<int>>, int> neighbors;
+    std::vector<std::pair<std::weak_ptr<utils::node<int>>, int>> neighbors;
 };
 
 void test_finds_goal_with_shortest_path()
