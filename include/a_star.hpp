@@ -5,6 +5,7 @@
 #include <queue>
 #include <unordered_map>
 #include <unordered_set>
+#include <algorithm>
 
 namespace utils
 {
@@ -12,8 +13,46 @@ namespace utils
   class node
   {
   public:
+    virtual ~node() = default;
+
+    /**
+     * Computes and returns the cost metric for this node (or path), optionally
+     * relative to a specified goal node.
+     *
+     * @tparam Tp Numeric type used for the cost value.
+     * @param goal Optional pointer to the goal node; if nullptr, the implementation
+     *             may compute an intrinsic or heuristic cost independent of a goal.
+     * @return The computed cost as a value of type Tp.
+     */
     [[nodiscard]] virtual Tp cost(std::shared_ptr<node<Tp>> goal = nullptr) const noexcept = 0;
+    /**
+     * Returns the successor nodes of the current node along with their associated transition costs.
+     *
+     * This method must be implemented by derived classes to expose the adjacency information needed
+     * by A* (or similar graph search algorithms). Each entry in the returned map represents a directed
+     * edge from the current node to a successor:
+     *  - key: a shared pointer to the successor node
+     *  - value: the cost (edge weight) to move from the current node to that successor
+     *
+     * Requirements and notes:
+     *  - The returned container should include all valid successors reachable in one step.
+     *  - Costs should be finite and represent non-negative traversal weights if the search algorithm
+     *    assumes monotonicity; negative weights are typically unsupported by A*.
+     *  - Use of shared_ptr implies shared ownership of node instances across the graph; implementations
+     *    should ensure consistent identity and lifetime management of nodes.
+     *
+     * @return A map where each key is a shared pointer to a successor node and the corresponding value is the cost to reach that node.
+     */
     [[nodiscard]] virtual std::unordered_map<std::shared_ptr<node<Tp>>, Tp> get_successors() = 0;
+    /**
+     * Checks whether the current search node/state satisfies the goal condition.
+     *
+     * This method is invoked by the A* search to determine if the algorithm
+     * should terminate with the current node as the solution. Implementations
+     * must provide the specific goal criterion for the problem domain.
+     *
+     * @return true if the current node represents a goal state; false otherwise.
+     */
     [[nodiscard]] virtual bool is_goal() const noexcept = 0;
   };
 
@@ -36,6 +75,7 @@ namespace utils
       came_from[root] = nullptr;
       g_score[root] = 0;
     }
+    virtual ~a_star() = default;
 
     [[nodiscard]] std::shared_ptr<node<Tp>> search(std::shared_ptr<node<Tp>> goal = nullptr) noexcept
     {
@@ -137,6 +177,22 @@ namespace utils
 #endif
       }
       return true;
+    }
+
+    [[nodiscard]] std::vector<std::shared_ptr<node<Tp>>> get_path() const noexcept
+    {
+      std::vector<std::shared_ptr<node<Tp>>> path;
+      auto current = c_node;
+      while (current)
+      {
+        path.push_back(current);
+        auto it = came_from.find(current);
+        if (it == came_from.end() || it->second == nullptr)
+          break;
+        current = it->second;
+      }
+      std::reverse(path.begin(), path.end());
+      return path;
     }
 
     [[nodiscard]] node<Tp> &get_current_node() noexcept { return *c_node; }
