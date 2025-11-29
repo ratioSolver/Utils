@@ -51,7 +51,7 @@ namespace utils
         backtrack_to(find_common_ancestor(c_node, current));
         if (!advance_to(*current))
         { // Conflict detected, backtrack..
-#ifdef BUILD_LISTENERS
+#ifdef UTILS_A_STAR_ENABLE_LISTENERS
           inconsistent_node(*current);
 #endif
           continue;
@@ -61,7 +61,7 @@ namespace utils
         if (current->is_goal() || (goal && current == goal))
         {
           c_node = current;
-#ifdef BUILD_LISTENERS
+#ifdef UTILS_A_STAR_ENABLE_LISTENERS
           current_node(*c_node);
 #endif
           return current;
@@ -112,7 +112,7 @@ namespace utils
       {
         retract(*c_node);
         c_node = came_from.at(c_node);
-#ifdef BUILD_LISTENERS
+#ifdef UTILS_A_STAR_ENABLE_LISTENERS
         current_node(*c_node);
 #endif
       }
@@ -132,7 +132,7 @@ namespace utils
         if (!expand(**it))
           return false;
         c_node = (*it)->get_parent();
-#ifdef BUILD_LISTENERS
+#ifdef UTILS_A_STAR_ENABLE_LISTENERS
         current_node(*c_node);
 #endif
       }
@@ -160,7 +160,7 @@ namespace utils
     virtual void retract(const node<Tp> &) noexcept {}
     virtual bool expand(node<Tp> &) noexcept { return true; }
 
-#ifdef BUILD_LISTENERS
+#ifdef UTILS_A_STAR_ENABLE_LISTENERS
     virtual void current_node(const node<Tp> &) {}
     virtual void inconsistent_node(const node<Tp> &) {}
 #endif

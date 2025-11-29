@@ -23,9 +23,9 @@ if(${LOGGING_LEVEL_INDEX} EQUAL -1)
     message(FATAL_ERROR "Invalid logging level: ${LOGGING_LEVEL}")
 endif()
 
-option(BUILD_LISTENERS "Build listners" OFF)
+option(UTILS_A_STAR_ENABLE_LISTENERS "Enable listener callbacks for the A* solver" OFF)
 option(UTILS_A_STAR_ENABLE_NAVIGATION "Enable navigation hooks for the A* solver" OFF)
-option(BUILD_CRYPTO "Build crypto" OFF)
+option(UTILS_ENABLE_CRYPTO "Enable crypto support" OFF)
 
 if(LOGGING_LEVEL STREQUAL "TRACE")
     set(LOG_LEVEL 6)
@@ -50,9 +50,9 @@ target_include_directories(utils PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE
 target_compile_definitions(utils PUBLIC INT_TYPE=${INT_TYPE} LOGGING_LEVEL=${LOG_LEVEL})
 setup_sanitizers(utils)
 
-message(STATUS "Build listners: ${BUILD_LISTENERS}")
-if(BUILD_LISTENERS)
-    target_compile_definitions(utils PUBLIC BUILD_LISTENERS)
+message(STATUS "A* listeners: ${UTILS_A_STAR_ENABLE_LISTENERS}")
+if(UTILS_A_STAR_ENABLE_LISTENERS)
+    target_compile_definitions(utils PUBLIC UTILS_A_STAR_ENABLE_LISTENERS)
 endif()
 
 message(STATUS "A* navigation hooks: ${UTILS_A_STAR_ENABLE_NAVIGATION}")
@@ -60,8 +60,8 @@ if(UTILS_A_STAR_ENABLE_NAVIGATION)
     target_compile_definitions(utils PUBLIC UTILS_A_STAR_ENABLE_NAVIGATION)
 endif()
 
-message(STATUS "Build crypto: ${BUILD_CRYPTO}")
-if(BUILD_CRYPTO)
+message(STATUS "Crypto support: ${UTILS_ENABLE_CRYPTO}")
+if(UTILS_ENABLE_CRYPTO)
     find_package(OpenSSL REQUIRED)
 
     target_sources(utils PRIVATE src/crypto.cpp)
