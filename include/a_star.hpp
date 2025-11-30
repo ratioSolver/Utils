@@ -179,6 +179,13 @@ namespace utils
       return true;
     }
 
+    [[nodiscard]] const node<Tp> *get_parent(const node<Tp> &n) const noexcept
+    {
+      if (auto it = came_from.find(&n); it != came_from.end())
+        return it->second;
+      return nullptr;
+    }
+
     [[nodiscard]] std::vector<std::shared_ptr<node<Tp>>> get_path() const noexcept
     {
       std::vector<std::shared_ptr<node<Tp>>> path;
