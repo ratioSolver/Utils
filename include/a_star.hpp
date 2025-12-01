@@ -72,7 +72,7 @@ namespace utils
     {
       c_node = root;
       open_list.push({root, root->cost()});
-      came_from[root.get()] = nullptr;
+      came_from[root] = nullptr;
       g_score[root] = 0;
     }
     virtual ~a_star() = default;
@@ -89,7 +89,7 @@ namespace utils
 
 #ifdef UTILS_A_STAR_ENABLE_NAVIGATION
         backtrack_to(find_common_ancestor(c_node, current));
-        if (!advance_to(*current))
+        if (!advance_to(current))
         { // Conflict detected, backtrack..
 #ifdef UTILS_A_STAR_ENABLE_LISTENERS
           inconsistent_node(*current);
@@ -118,7 +118,7 @@ namespace utils
 
           if (!g_score.count(neighbor) || tentative_g_score < g_score.at(neighbor))
           {
-            came_from[neighbor.get()] = current.get();
+            came_from[neighbor] = current;
             g_score[neighbor] = tentative_g_score;
             Tp f_cost = tentative_g_score + neighbor->cost(goal);
             open_list.push({neighbor, f_cost});
@@ -135,13 +135,13 @@ namespace utils
       while (a)
       {
         ancestors.insert(a);
-        a = came_from.at(a.get());
+        a = came_from.at(a);
       }
       while (b)
       {
         if (ancestors.count(b))
           return b;
-        b = came_from.at(b.get());
+        b = came_from.at(b);
       }
       return nullptr;
     }
@@ -151,27 +151,27 @@ namespace utils
       while (c_node != n)
       {
         retract(*c_node);
-        c_node = came_from.at(c_node.get());
+        c_node = came_from.at(c_node);
 #ifdef UTILS_A_STAR_ENABLE_LISTENERS
         current_node(*c_node);
 #endif
       }
     }
 
-    bool advance_to(const node<Tp> &target) noexcept
+    bool advance_to(std::shared_ptr<node<Tp>> target) noexcept
     {
-      std::vector<node<Tp> *> path;
-      auto temp_node = &target;
-      while (temp_node != c_node.get())
+      std::vector<std::shared_ptr<node<Tp>>> path;
+      auto temp_node = target;
+      while (temp_node != c_node)
       {
         path.push_back(temp_node);
-        temp_node = temp_node->get_parent().get();
+        temp_node = came_from.at(temp_node);
       }
       for (auto it = path.rbegin(); it != path.rend(); ++it)
       {
         if (!expand(**it))
           return false;
-        c_node = (*it)->get_parent();
+        c_node = *it;
 #ifdef UTILS_A_STAR_ENABLE_LISTENERS
         current_node(*c_node);
 #endif
@@ -193,7 +193,7 @@ namespace utils
       while (current)
       {
         path.push_back(current);
-        auto it = came_from.find(current.get());
+        auto it = came_from.find(current);
         if (it == came_from.end() || it->second == nullptr)
           break;
         current = it->second;
@@ -229,10 +229,10 @@ namespace utils
 #endif
 
   private:
-    std::shared_ptr<node<Tp>> c_node;                                             // Current node being processed
-    std::priority_queue<pq_elem, std::vector<pq_elem>, std::greater<>> open_list; // Priority queue of nodes to explore
-    std::unordered_map<const node<Tp> *, const node<Tp> *> came_from;             // Best path to each node
-    std::unordered_map<std::shared_ptr<const node<Tp>>, Tp> g_score;              // Cost from start to each node
-    std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;              // Set of nodes already evaluated
+    std::shared_ptr<node<Tp>> c_node;                                                   // Current node being processed
+    std::priority_queue<pq_elem, std::vector<pq_elem>, std::greater<>> open_list;       // Priority queue of nodes to explore
+    std::unordered_map<std::shared_ptr<node<Tp>>, std::shared_ptr<node<Tp>>> came_from; // Best path to each node
+    std::unordered_map<std::shared_ptr<const node<Tp>>, Tp> g_score;                    // Cost from start to each node
+    std::unordered_set<std::shared_ptr<const node<Tp>>> closed_list;                    // Set of nodes already evaluated
   };
 } // namespace utils
