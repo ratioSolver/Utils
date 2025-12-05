@@ -99,13 +99,7 @@ namespace utils
 #endif
 
         if (current->is_goal() || (goal && current == goal))
-        {
-          c_node = current;
-#ifdef UTILS_A_STAR_ENABLE_LISTENERS
-          current_node(*c_node);
-#endif
           return current;
-        }
 
         closed_list.insert(current);
 
